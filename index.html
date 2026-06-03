@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Event Thresholding Analyzer v10.2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Custom Scrollbar for Demo Panel */
+        .demo-scroll::-webkit-scrollbar { height: 6px; }
+        .demo-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .demo-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .demo-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Smooth transitions */
+        .tab-btn { transition: all 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
+
+    <!-- HEADER -->
+    <header class="bg-slate-950 text-white p-4 shadow-lg flex items-center justify-between border-b border-blue-900/30 sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <i data-lucide="shield-alert" class="w-8 h-8 text-blue-400 flex-shrink-0"></i>
+            <div>
+                <h1 class="text-lg md:text-xl font-bold tracking-wide leading-tight">Global Event Thresholding Analyzer</h1>
+                <p class="text-xs text-emerald-400 font-medium">SOP Master System v10.4 (Engine Perfected: Directionless Regex Matching)</p>
+            </div>
+        </div>
+        <div class="hidden md:flex items-center gap-2 text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 shadow-inner">
+            <i data-lucide="cpu" class="w-4 h-4 text-emerald-400 animate-pulse"></i>
+            <span class="text-emerald-400 font-medium">Hybrid Regex + AI Vision Engaged</span>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-[1400px] w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        
+        <!-- LEFT COLUMN: Inputs & SOP Variables -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- STEP 1: CORE PARAMETERS -->
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-blue-500"></i>
+                    1. Core Incident Parameters
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Target Region</label>
+                        <select id="regionSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow">
+                            <option value="USCAN">USCAN (USA / Canada) - Baseline</option>
+                            <option value="NYC">New York City (NYC) - Hyperlocal</option>
+                            <option value="WE">Western Europe (WE) - High Sensitivity</option>
+                            <option value="UK">United Kingdom (UK) - Hyperlocal</option>
+                            <option value="ANZ">Australia / New Zealand (ANZ) - Event Detection</option>
+                            <option value="FR">France / Germany Minimum Modifiers</option>
+                            <option value="LATAM">Latin America (LATAM) - Crime Grid</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Corporate / Asset Scope</label>
+                        <select id="criskSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow">
+                            <option value="none">Standard Public Event</option>
+                            <option value="crisk_asset">Impacts CRisk Company Asset (Starbucks, Factory, etc.)</option>
+                            <option value="crisk_exec">Direct Threat to CRisk Executive (CEO / Founder)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Pasted Content, News Lead, or URL</label>
+                    <textarea id="inputText" class="w-full h-32 p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none text-slate-700 text-sm shadow-inner leading-relaxed" placeholder="Paste live social feeds, news agency slugs, or scanner logs here..."></textarea>
+                </div>
+
+                <!-- URL warning -->
+                <div id="urlWarning" class="hidden flex items-start gap-2 text-xs text-orange-700 bg-orange-50 p-3 rounded-lg border border-orange-200">
+                    <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0 mt-0.5"></i>
+                    <p><strong>Raw URL Detected:</strong> Keywords extracted from URL slug. For best accuracy with unformatted social media posts, ensure you also paste the text description of the event.</p>
+                </div>
+            </div>
+
+            <!-- STEP 1.5: AI VISION INTEGRATION (Image & Video) -->
+            <div class="bg-indigo-50 p-5 md:p-6 rounded-xl shadow-sm border border-indigo-200 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                    <i data-lucide="eye" class="w-24 h-24 text-indigo-900"></i>
+                </div>
+                <h2 class="text-lg font-bold mb-3 flex items-center gap-2 text-indigo-900 border-b border-indigo-200/50 pb-2 relative z-10">
+                    <i data-lucide="camera" class="w-5 h-5 text-indigo-600"></i>
+                    AI Vision Analysis (Image & Video Triage)
+                </h2>
+                <p class="text-xs text-indigo-700 mb-4 relative z-10">Upload a screenshot, photo, or short video clip. For videos, the system will automatically extract a critical keyframe and send it to the Gemini Vision AI to extract kinetic keywords to feed into the SOP Regex Engine.</p>
+                
+                <div class="flex items-center gap-4 relative z-10">
+                    <label class="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg cursor-pointer transition-colors shadow-sm">
+                        <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+                        Upload Media (Img/Vid)
+                        <input type="file" id="imageInput" accept="image/*,video/*" class="hidden" onchange="handleImageUpload(event)">
+                    </label>
+                    <span id="uploadStatus" class="text-xs font-medium text-indigo-600 truncate max-w-[200px] md:max-w-[300px]">No media uploaded.</span>
+                </div>
+
+                <!-- Image Preview and AI Context Output -->
+                <div id="visionOutputContainer" class="hidden mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                    <div class="col-span-1">
+                        <img id="imagePreview" class="w-full h-auto rounded-lg border-2 border-indigo-300 shadow-sm" alt="Preview">
+                    </div>
+                    <div class="col-span-1 md:col-span-2">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-indigo-500 mb-1.5">Extracted Vision Context</label>
+                        <textarea id="aiContext" class="w-full h-full min-h-[100px] p-3 bg-white border border-indigo-300 rounded-lg text-xs text-indigo-900 leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none shadow-inner" readonly placeholder="AI extraction will appear here..."></textarea>
+                    </div>
+                </div>
+
+                <div id="visionLoading" class="hidden mt-4 flex items-center gap-3 text-indigo-600 font-semibold text-sm relative z-10">
+                    <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i>
+                    Processing media file...
+                </div>
+            </div>
+
+            <!-- STEP 2: CYBER & LOCKDOWN OVERRIDES -->
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-blue-500"></i>
+                    2. Specialized Domain Directives
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Cyber Incident Class</label>
+                        <select id="cyberSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="none">No Cyber Context</option>
+                            <option value="healthcare">Healthcare / Hospital Data Security Incident</option>
+                            <option value="ransomware">Active Ransomware Attack on Network/Systems</option>
+                            <option value="large_scale">Attack Targeting Gov / Financial / NATO Entities</option>
+                            <option value="joint_advisory">Joint Government Advisory (CISA / FBI / NSA)</option>
+                            <option value="zero_day">Actively Exploited Bug / Zero-Day</option>
+                            <option value="phishing">Police Exposing Large-Scale Phishing Campaign</option>
+                            <option value="small_leak">Small-Scale Data Leak (Pastebin list, individual doxxing)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Corporate Impact Scale</label>
+                        <select id="corpSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="none">No Corporate Context</option>
+                            <option value="merger_major">Large Firms Merging (e.g. Apple buying Google)</option>
+                            <option value="c_suite_resign">C-Suite Resignations at Globally Known Firms</option>
+                            <option value="mass_layoffs">Mass Layoffs (>= 10% workforce reduction)</option>
+                            <option value="refinery_physical">Refinery / Factory Explosion or Force Takeover</option>
+                            <option value="minor_deal">Mid-Scale Acquisition / Employee Walkout</option>
+                            <option value="supply_shortage">Surprise Supply Chain Shortage (Signal baseline)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-5">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Lockdown Type</label>
+                        <select id="lockdownLocation" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="none">None</option>
+                            <option value="school">School / University</option>
+                            <option value="mall">Shopping Mall</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Active Standoff</label>
+                        <select id="lockdownStatus" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="none">No Lockdown</option>
+                            <option value="active">Active Lockdown</option>
+                            <option value="knockdown">Knockdown / Lifted</option>
+                            <option value="police_scene">Police on Scene Only</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Active Threat</label>
+                        <select id="lockdownThreat" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option value="none">Unconfirmed</option>
+                            <option value="shots_heard">Shots Heard / SWAT</option>
+                            <option value="active_shooter">Confirmed Active Shooter</option>
+                            <option value="mass_kinetic">Multiple Fatalities / Cop Fatal</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: DYNAMIC OVERRIDES -->
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                    <i data-lucide="sliders" class="w-5 h-5 text-blue-500"></i>
+                    3. Dynamic Quantitative Overrides
+                </h2>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Fatalities</label>
+                        <input type="number" id="fatalityCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-red-600 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Injuries</label>
+                        <input type="number" id="injuryCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-orange-600 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Arrests</label>
+                        <input type="number" id="arrestCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-blue-600 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Trafficked</label>
+                        <input type="number" id="trafficCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-purple-600 focus:ring-2 focus:ring-blue-500 outline-none transition-shadow">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="user-check" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
+                            <span class="text-xs font-semibold text-slate-700 leading-tight">US / High-Value Citizen?</span>
+                        </div>
+                        <input type="checkbox" id="usCitizenCheck" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded cursor-pointer">
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="shield" class="w-4 h-4 text-blue-500 flex-shrink-0"></i>
+                            <span class="text-xs font-semibold text-slate-700 leading-tight">Special Forces Deployed?</span>
+                        </div>
+                        <input type="checkbox" id="specialForcesCheck" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-slate-300 rounded cursor-pointer">
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200 hover:bg-blue-100 transition-colors">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="building" class="w-4 h-4 text-blue-600 flex-shrink-0"></i>
+                            <span class="text-xs font-semibold text-blue-800 leading-tight">Prominent Landmark?</span>
+                        </div>
+                        <input type="checkbox" id="landmarkCheck" class="w-4 h-4 text-blue-600 focus:ring-blue-500 border-blue-300 rounded cursor-pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEMOS FROM EXHAUSTIVE TRAINING MATRIX -->
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <i data-lucide="mouse-pointer-click" class="w-4 h-4"></i> Live Training Slide Demos
+                </h2>
+                
+                <div class="flex overflow-x-auto gap-2 mb-5 border-b border-slate-100 pb-4 demo-scroll whitespace-nowrap">
+                    <button onclick="switchTab('crime_alerts')" id="tab-crime_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm shrink-0">Crime & Alerts</button>
+                    <button onclick="switchTab('politics')" id="tab-politics" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Politics (New)</button>
+                    <button onclick="switchTab('earthquake_flood')" id="tab-earthquake_flood" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Earthquakes & Floods</button>
+                    <button onclick="switchTab('nyc_alerts')" id="tab-nyc_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">NYC Specific</button>
+                    <button onclick="switchTab('hazmat_rail')" id="tab-hazmat_rail" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Hazmat & Rail</button>
+                    <button onclick="switchTab('weather_disaster')" id="tab-weather_disaster" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Tornadoes & Hurricanes</button>
+                    <button onclick="switchTab('wildfires')" id="tab-wildfires" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Wildfires</button>
+                    <button onclick="switchTab('aviation_marine')" id="tab-aviation_marine" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Aviation & Marine</button>
+                    <button onclick="switchTab('lockdowns')" id="tab-lockdowns" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Lockdowns & Cyber</button>
+                    <button onclick="switchTab('unrest_infra')" id="tab-unrest_infra" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Unrest & Infra</button>
+                </div>
+
+                <!-- TAB PANELS -->
+                <div id="scenario-crime_alerts" class="scenario-panel flex flex-wrap gap-2 animate-in fade-in">
+                    <button onclick="loadDemo('we_stabbing_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">WE Stabbing (Local)</button>
+                    <button onclick="loadDemo('we_shooting_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">WE Shooting (National)</button>
+                    <button onclick="loadDemo('we_landmark_global')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">WE Landmark Attack (Global)</button>
+                    <button onclick="loadDemo('we_terror_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">WE Active Terror (Flash)</button>
+                    <button onclick="loadDemo('police_arrest_custody')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Suspect in Custody (Local)</button>
+                    <button onclick="loadDemo('mass_casualty_injuries')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Mass Injury 5+ Override (Flash)</button>
+                    <button onclick="loadDemo('amber_alert_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Amber Alert (Local)</button>
+                    <button onclick="loadDemo('landmark_fire')" class="text-xs bg-blue-50 hover:bg-blue-100 text-blue-700 py-1.5 px-3 rounded-full border border-blue-200 transition-colors font-medium">Landmark Image Triage (National)</button>
+                </div>
+
+                <div id="scenario-politics" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('pol_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">POTUS Emergency (Flash)</button>
+                    <button onclick="loadDemo('pol_global')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">SCOTUS Death (Global)</button>
+                    <button onclick="loadDemo('pol_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Senator Indictment (National)</button>
+                    <button onclick="loadDemo('pol_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Capitol Protest (Local)</button>
+                </div>
+
+                <div id="scenario-earthquake_flood" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('eq_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Mag >7.0 Earthquake (Flash)</button>
+                    <button onclick="loadDemo('eq_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Mag 6.2 Earthquake (National)</button>
+                    <button onclick="loadDemo('flood_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Dam Failure / Catastrophic (Flash)</button>
+                    <button onclick="loadDemo('flood_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Flash Flood Warning (Local)</button>
+                </div>
+
+                <div id="scenario-nyc_alerts" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('nyc_times_square_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Times Square Shooter (Flash)</button>
+                    <button onclick="loadDemo('nyc_nypd_level4')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">NYPD Level 4 (Flash)</button>
+                    <button onclick="loadDemo('nyc_nypd_level3')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">NYPD Level 3 (Global)</button>
+                    <button onclick="loadDemo('nyc_gw_bridge')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">GW Bridge Closed (Global)</button>
+                    <button onclick="loadDemo('nyc_mta_stabbing')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Subway Stabbing (National)</button>
+                </div>
+
+                <div id="scenario-hazmat_rail" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('cbrn_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Radiation Leak / CBRN (Flash)</button>
+                    <button onclick="loadDemo('hazmat_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Toxic Train Spill Evac (National)</button>
+                    <button onclick="loadDemo('rail_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">High-Speed Train Derail (Flash)</button>
+                    <button onclick="loadDemo('rail_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Subway Network Suspended (National)</button>
+                </div>
+
+                <div id="scenario-weather_disaster" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('tornado_emergency')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Tornado Emergency (Flash)</button>
+                    <button onclick="loadDemo('pds_tornado')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">PDS Tornado >50k (Flash)</button>
+                    <button onclick="loadDemo('tornado_warning')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Tornado Warning (Local)</button>
+                    <button onclick="loadDemo('hurricane_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Major Hurricane Cat 4 (Flash)</button>
+                    <button onclick="loadDemo('tropical_storm_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Tropical Storm Warn (Local)</button>
+                    <button onclick="loadDemo('volcano_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Volcanic Ash Advisory (Flash)</button>
+                </div>
+
+                <div id="scenario-unrest_infra" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('unrest_insurgency')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Military Coup (Flash)</button>
+                    <button onclick="loadDemo('protest_clashes')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">Protest Clashes / Flights (Global)</button>
+                    <button onclick="loadDemo('protest_arrests')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Protest Arrests (National)</button>
+                    <button onclick="loadDemo('protest_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Local Disruption / Rally (Local)</button>
+                    <button onclick="loadDemo('infra_blackout')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Multi-State Blackout (Flash)</button>
+                    <button onclick="loadDemo('finance_bank_run')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Run on Major Bank (National)</button>
+                </div>
+
+                <div id="scenario-wildfires" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('wildfire_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Megafire / Town Destroyed (Flash)</button>
+                    <button onclick="loadDemo('wildfire_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Red Flag Warn / Evacs (National)</button>
+                    <button onclick="loadDemo('wildfire_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Brush Fire Threatening (Local)</button>
+                    <button onclick="loadDemo('wildfire_signal')" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 py-1.5 px-3 rounded-full border border-slate-200 transition-colors font-medium">Fire Weather Watch (Signal)</button>
+                </div>
+
+                <div id="scenario-aviation_marine" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('aviation_crash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Commercial Plane Crash (Flash)</button>
+                    <button onclick="loadDemo('aviation_cockpit')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">Cockpit Breach (Global)</button>
+                    <button onclick="loadDemo('maritime_pirate')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Pirate Attack (Flash)</button>
+                    <button onclick="loadDemo('aviation_drone')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Drone Grounding (National)</button>
+                    <button onclick="loadDemo('maritime_ferry')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Cruise Ship Stranded (National)</button>
+                </div>
+
+                <div id="scenario-lockdowns" class="scenario-panel hidden flex flex-wrap gap-2">
+                    <button onclick="loadDemo('mall_highly_kinetic')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Mall: Highly Kinetic (Flash)</button>
+                    <button onclick="loadDemo('hospital_breach')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Hospital Ransomware (Flash)</button>
+                    <button onclick="loadDemo('school_confirmed_active')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">School: Active Shooter (Global)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Results & Triggered Matrix Rules -->
+        <div class="lg:col-span-5 flex flex-col gap-6 lg:order-last order-first">
+            <div class="bg-white p-5 md:p-6 rounded-xl shadow-lg border border-slate-200 w-full flex flex-col lg:sticky lg:top-24 max-h-[85vh]">
+                <div>
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 border-b border-slate-100 pb-3 text-slate-900">
+                        <i data-lucide="activity" class="w-5 h-5 text-emerald-500"></i>
+                        Threshold Recommendation
+                    </h2>
+
+                    <div id="emptyState" class="text-center text-slate-400 py-10 flex flex-col items-center">
+                        <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-3 border border-slate-100">
+                            <i data-lucide="clipboard-paste" class="w-8 h-8 text-slate-300"></i>
+                        </div>
+                        <p class="text-sm px-4">Configure parameters, upload an image/video, or paste text to run matrix analysis.</p>
+                    </div>
+
+                    <div id="loadingState" class="hidden space-y-4 py-12">
+                        <div class="flex flex-col items-center justify-center">
+                            <i data-lucide="loader-2" class="w-10 h-10 text-blue-500 animate-spin mb-4"></i>
+                            <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest animate-pulse">Running Engine...</p>
+                        </div>
+                    </div>
+
+                    <div id="resultState" class="hidden space-y-5 fade-in flex-1 flex flex-col overflow-hidden">
+                        <div class="flex-shrink-0">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Suggested Alert Level</p>
+                            <div id="labelCard" class="border-l-4 p-4 md:p-5 rounded-r-xl shadow-md transition-all">
+                                <h3 id="labelTitle" class="text-2xl sm:text-3xl font-black tracking-tight uppercase break-words leading-none"></h3>
+                                <p id="labelCategory" class="text-sm mt-2 opacity-90 font-medium"></p>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex-1 overflow-hidden flex flex-col">
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex-shrink-0">SOP Rules Triggered</p>
+                            <ul id="rulesList" class="space-y-3 overflow-y-auto pr-2 custom-scroll pb-2 flex-1"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Gemini API Configuration
+        const apiKey = ""; // API key is provided by the execution environment at runtime
+
+        // UI Selectors
+        const inputEl = document.getElementById('inputText');
+        const regionEl = document.getElementById('regionSelect');
+        const criskEl = document.getElementById('criskSelect');
+        const cyberEl = document.getElementById('cyberSelect');
+        const corpEl = document.getElementById('corpSelect');
+        const urlWarning = document.getElementById('urlWarning');
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const resultState = document.getElementById('resultState');
+        const labelCard = document.getElementById('labelCard');
+        const labelTitle = document.getElementById('labelTitle');
+        const labelCategory = document.getElementById('labelCategory');
+        const rulesList = document.getElementById('rulesList');
+        
+        // AI Vision Selectors
+        const imageInput = document.getElementById('imageInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const imagePreview = document.getElementById('imagePreview');
+        const aiContextBox = document.getElementById('aiContext');
+        const visionOutputContainer = document.getElementById('visionOutputContainer');
+        const visionLoading = document.getElementById('visionLoading');
+
+        // Inputs overrides
+        const fatalityInput = document.getElementById('fatalityCount');
+        const injuryInput = document.getElementById('injuryCount');
+        const arrestInput = document.getElementById('arrestCount');
+        const trafficInput = document.getElementById('trafficCount');
+        const usCitizenCheck = document.getElementById('usCitizenCheck');
+        const specialForcesCheck = document.getElementById('specialForcesCheck');
+        const landmarkCheck = document.getElementById('landmarkCheck');
+
+        // School/Mall specifics
+        const lockdownLocation = document.getElementById('lockdownLocation');
+        const lockdownStatus = document.getElementById('lockdownStatus');
+        const lockdownThreat = document.getElementById('lockdownThreat');
+
+        // --- EXHAUSTIVE DYNAMIC SOP DATABASE v10.4 ---
+        // Levels defined in official pyramid:
+        // 0: Local Signal | 1: Signal | 2: Local Urgent | 3: National Urgent | 4: Global Urgent | 5: Flash
+        const sopRules = [
+            // US POLITICS & GOVERNANCE (Directionless Lookaheads Applied)
+            { id: "pol_flash", trigger: (text, region, flags) => region === 'USCAN' && /(?=.*(potus|president|vpotus|vice president|presidential candidate))(?=.*(assassination|death|severe medical emergency|critical condition|killed|passes away|passed away))/i.test(text), level: 5, cat: "US Politics", reason: "SOP: Assassination, death, or severe medical emergency of POTUS, VPOTUS, or leading presidential candidate triggers Flash." },
+            { id: "pol_global", trigger: (text, region, flags) => region === 'USCAN' && (/(?=.*(potus|president|vpotus|vice president))(?=.*(assassination attempt|credible plot|serious threat))/i.test(text) || /(?=.*(supreme court justice|scotus|speaker of the house|congressional leader|majority leader))(?=.*(death|critical injury|killed|passes away|passed away))/i.test(text)), level: 4, cat: "US Politics", reason: "SOP: Assassination attempt/threat against POTUS/VPOTUS, or death/critical injury of a Supreme Court Justice or Congressional Leader escalates to Global Urgent." },
+            { id: "pol_national", trigger: (text, region, flags) => region === 'USCAN' && (/(?=.*(federal politician|senator|congressman|representative))(?=.*(major policy shift|nationwide mandate|arrest|indictment|indicted))/i.test(text) || /(?=.*(washington dc|d\.c\.|capitol hill))(?=.*(widespread.*riot|organized political unrest))/i.test(text)), level: 3, cat: "US Politics", reason: "SOP: High-profile federal indictments, nationwide mandates, or organized political riots in DC trigger National Urgent." },
+            { id: "pol_local", trigger: (text, region, flags) => region === 'USCAN' && (/(?=.*(state capitol|local government))(?=.*(targeted protest|protest))/i.test(text) || /(?=.*(governor|mayor))(?=.*(arrest|indictment|indicted))/i.test(text) || /(election disruption|polling place closure|voting suspended)/i.test(text)), level: 2, cat: "US Politics", reason: "SOP: Targeted protests at state capitols, arrests of state-level politicians, or localized election disruptions establish a Local Urgent threshold." },
+            { id: "pol_signal", trigger: (text, region, flags) => region === 'USCAN' && /(routine political rally|campaign rally|legislative debate|senate vote|congressional vote|non-violent protest)/i.test(text), level: 1, cat: "US Politics", reason: "SOP: Routine political rallies and legislative debates/votes default to Signal." },
+
+            // PROMINENT LANDMARK / INFRASTRUCTURE OVERRIDE 
+            { id: "landmark_incident_upgrade", trigger: (text, region, flags) => flags.landmark && /(fire|smoke|stabbing|shooting|evacuation|police|suspicious|crash|incident)/i.test(text), level: 3, cat: "Sensitive Location", reason: "SOP: Any baseline incident (fires, crime, evacuations) occurring at a prominent regional landmark, arts center, or major transit hub automatically escalates to National Urgent." },
+
+            // MISSING PERSONS ALERTS
+            { id: "missing_flash", trigger: (text, region, flags) => /(kidnapping of (foreign national|us citizen|diplomat|high-profile)|mass abduction)/i.test(text), level: 5, cat: "Missing Persons", reason: "SOP: Kidnapping of US citizens, foreign nationals, diplomats, or mass abductions trigger Flash." },
+            { id: "missing_national", trigger: (text, region, flags) => /(?=.*(nationwide|multi-state))(?=.*(amber alert|manhunt|search))/i.test(text), level: 3, cat: "Missing Persons", reason: "SOP: Nationwide or multi-state AMBER alerts and manhunts are National Urgent." },
+            { id: "missing_local", trigger: (text, region, flags) => /(amber alert|silver alert|missing child|endangered missing|child abducted)/i.test(text), level: 2, cat: "Missing Persons", reason: "SOP: Localized AMBER alerts, Silver alerts, or endangered missing children are Local Urgent." },
+            { id: "missing_signal", trigger: (text, region, flags) => /(missing (person|adult|teen))/i.test(text), level: 1, cat: "Missing Persons", reason: "SOP: Standard missing adult or teen reports with no active threat default to Signal." },
+
+            // NYC HYPERLOCAL ALERTS
+            { id: "nyc_flash", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(times square|penn station|grand central|port authority|world trade|manhattan))(?=.*(active shooter|explosion|bomb|terror|mass casualty))/i.test(text), level: 5, cat: "NYC Hyperlocal", reason: "SOP (NYC): Active shooter, explosion, or terror incidents in Manhattan or major transit hubs instantly escalate to Flash." },
+            { id: "nyc_nypd_level4", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(nypd|police))(?=.*(level 4|level iv).*mobilization)/i.test(text), level: 5, cat: "NYC Hyperlocal", reason: "SOP (NYC): NYPD Level 4 Mobilization triggers Flash." },
+            { id: "nyc_nypd_level3", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(nypd|police))(?=.*(level 3|level iii).*mobilization)/i.test(text), level: 4, cat: "NYC Hyperlocal", reason: "SOP (NYC): NYPD Level 3 Mobilization triggers Global Urgent." },
+            { id: "nyc_bridge_tunnel", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(george washington bridge|lincoln tunnel|holland tunnel|brooklyn bridge))(?=.*(fully closed|complete closure|shut down))/i.test(text), level: 4, cat: "NYC Hyperlocal", reason: "SOP (NYC): Complete closure of a major NYC bridge or tunnel triggers Global Urgent." },
+            { id: "nyc_mta_national", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(mta|subway|train))(?=.*(derailment|active fire|stabbing|slashing))/i.test(text), level: 3, cat: "NYC Hyperlocal", reason: "SOP (NYC): MTA subway derailments, active fires, or violent crime (stabbing/slashing) on transit triggers National Urgent." },
+            { id: "nyc_nypd_local", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(nypd|police))(?=.*(level 1|level 2|level i|level ii).*mobilization)/i.test(text), level: 2, cat: "NYC Hyperlocal", reason: "SOP (NYC): NYPD Level 1 or 2 Mobilization establishes a Local Urgent baseline." },
+            { id: "nyc_subway_delay", trigger: (text, region, flags) => region === 'NYC' && /(?=.*(mta|subway|train))(?=.*(minor delay|signal problem|switch problem))/i.test(text), level: 1, cat: "NYC Hyperlocal", reason: "SOP (NYC): Minor MTA subway delays or signal problems default to Signal." },
+
+            // EARTHQUAKES & SEISMIC 
+            { id: "eq_flash", trigger: (text, region, flags) => /(magnitude\s*(\>|greater than|over|7\.[0-9]|8\.[0-9]|9\.[0-9]))|catastrophic earthquake|(?=.*buildings collapsed)(?=.*earthquake)|(?=.*earthquake)(?=.*tsunami warning)/i.test(text), level: 5, cat: "Earthquakes", reason: "SOP: Earthquakes > 7.0 Magnitude, triggering tsunami warnings, or causing widespread catastrophic collapse trigger Flash." },
+            { id: "eq_national", trigger: (text, region, flags) => /(magnitude\s*(6\.[0-9]))|(?=.*moderate damage)(?=.*earthquake)/i.test(text), level: 3, cat: "Earthquakes", reason: "SOP: Earthquakes between 6.0 and 6.9 Magnitude trigger National Urgent." },
+            { id: "eq_local", trigger: (text, region, flags) => /(magnitude\s*(5\.[0-9]))/i.test(text), level: 2, cat: "Earthquakes", reason: "SOP: Earthquakes between 5.0 and 5.9 Magnitude trigger Local Urgent." },
+            { id: "eq_signal", trigger: (text, region, flags) => /(magnitude\s*([1-4]\.[0-9]))|minor tremor/i.test(text), level: 1, cat: "Earthquakes", reason: "SOP: Minor earthquakes < 5.0 Magnitude default to Signal." },
+
+            // FLOODING & HYDROLOGICAL
+            { id: "flood_flash", trigger: (text, region, flags) => /(dam failure|catastrophic flash flood emergency|town completely submerged|mass drownings)/i.test(text), level: 5, cat: "Floods", reason: "SOP: Dam failures or Flash Flood Emergencies causing catastrophic inundation trigger Flash." },
+            { id: "flood_national", trigger: (text, region, flags) => /(widespread flooding|(?=.*flood warning)(?=.*evacuations)|river cresting at major flood stage)/i.test(text), level: 3, cat: "Floods", reason: "SOP: Widespread river flooding or flood warnings forcing localized evacuations are National Urgent." },
+            { id: "flood_local", trigger: (text, region, flags) => /(flash flood warning|street flooding|minor coastal flooding)/i.test(text), level: 2, cat: "Floods", reason: "SOP: Standard Flash Flood Warnings or localized street flooding are Local Urgent." },
+
+            // HAZMAT, CBRN & CHEMICAL
+            { id: "cbrn_flash", trigger: (text, region, flags) => /(radiation leak|nuclear incident|chemical weapon|biological attack|massive toxic cloud)/i.test(text), level: 5, cat: "Hazmat / CBRN", reason: "SOP: Radiation leaks, CBRN incidents, or massive toxic clouds trigger Flash." },
+            { id: "hazmat_national", trigger: (text, region, flags) => /(?=.*chemical spill)(?=.*evacuation)|(?=.*overturned hazmat truck)(?=.*highway closed)/i.test(text), level: 3, cat: "Hazmat / CBRN", reason: "SOP: Chemical spills forcing town/neighborhood evacuations or overturning hazmat trucks closing highways are National Urgent." },
+            { id: "hazmat_local", trigger: (text, region, flags) => /(?=.*minor chemical leak)|(?=.*gas leak)(?=.*contained)/i.test(text), level: 2, cat: "Hazmat / CBRN", reason: "SOP: Minor gas leaks or contained chemical spills are Local Urgent." },
+
+            // RAIL & MASS TRANSIT
+            { id: "rail_flash", trigger: (text, region, flags) => /(high-speed train derailment|mass casualty train crash|subway bombing)/i.test(text), level: 5, cat: "Rail & Transit", reason: "SOP: High-speed passenger train derailments or mass casualty transit crashes trigger Flash." },
+            { id: "rail_national", trigger: (text, region, flags) => /(freight train derailment|entire subway system suspended|major rail strike)/i.test(text), level: 3, cat: "Rail & Transit", reason: "SOP: Freight train derailments (non-hazmat) or complete suspension of a city's subway network are National Urgent." },
+            { id: "rail_local", trigger: (text, region, flags) => /(?=.*train struck vehicle)(?=.*no injuries)|subway station evacuated/i.test(text), level: 2, cat: "Rail & Transit", reason: "SOP: Trains striking unoccupied vehicles or single subway station evacuations are Local Urgent." },
+
+            // TORNADO MATRIX
+            { id: "tornado_emergency", trigger: (text, region, flags) => /(tornado emergency)/i.test(text), level: 5, cat: "Severe Weather", reason: "SOP: NWS 'Tornado Emergency' declaration is the highest alert tier and triggers an automatic Flash upgrade." },
+            { id: "tornado_pds_populated", trigger: (text, region, flags) => /(?=.*(pds tornado warning|particularly dangerous situation))(?=.*(\>50k|50,000|major population|city|metro))/i.test(text), level: 5, cat: "Severe Weather", reason: "SOP: 'Particularly Dangerous Situation' (PDS) Tornado Warnings explicitly targeting major population centers trigger Flash." },
+            { id: "tornado_catastrophic", trigger: (text, region, flags) => /(?=.*tornado)(?=.*(catastrophic damage|widespread devastation|fatalities confirmed|deadly tornado))/i.test(text), level: 5, cat: "Severe Weather", reason: "SOP: Post-event reports of confirmed fatalities or widespread catastrophic structural devastation directly linked to a tornado trigger Flash." },
+            { id: "tornado_large_violent", trigger: (text, region, flags) => /(?=.*tornado)(?=.*(wedge|violent|mile-wide|large and extremely dangerous))(?=.*on the ground)/i.test(text), level: 3, cat: "Severe Weather", reason: "SOP: Spotter/chaser confirmations of 'wedge', 'violent', or 'mile-wide' tornadoes actively on the ground are National Urgent." },
+            { id: "tornado_warning", trigger: (text, region, flags) => /(tornado warning)/i.test(text), level: 2, cat: "Severe Weather", reason: "SOP: Standard NWS Tornado Warnings are Local Urgent." },
+            { id: "tornado_unconfirmed", trigger: (text, region, flags) => /(tornado sirens sounding|unconfirmed tornado|funnel cloud reported)/i.test(text), level: 2, cat: "Severe Weather", reason: "SOP: Reports of tornado sirens sounding or unverified public reports of a funnel cloud are Local Urgent." },
+            { id: "tornado_watch", trigger: (text, region, flags) => /(tornado watch)/i.test(text), level: 1, cat: "Severe Weather", reason: "SOP: Standard NWS Tornado Watches (conditions favorable, no active threat) default to Signal." },
+
+            // PUBLIC DISRUPTION, CIVIL UNREST & PROTESTS 
+            { id: "protest_flash", trigger: (text, region, flags) => /(armed insurgency|military coup|(?=.*riot)(?=.*mass fatalities)|(?=.*storming)(?=.*(capitol|parliament|presidential palace)))/i.test(text), level: 5, cat: "Public Disruption", reason: "SOP: Armed insurgencies, military coups, highly fatal riots, or storming national capitals trigger Flash." },
+            { id: "protest_global", trigger: (text, region, flags) => /(protest|rally|riot|demonstration|march|strike)/i.test(text) && /(clashes|flights canceled|flight cancellations|major disruption|significant disruption|massive scale|tens of thousands|prominent personality|prominent figure|airport shut down)/i.test(text), level: 4, cat: "Public Disruption", reason: "SOP: Protests involving clashes, major/significant disruptions (e.g., flights canceled), prominent personalities, or massive scale escalate to Global Urgent." },
+            { id: "protest_national", trigger: (text, region, flags) => /(protest|rally|riot|demonstration|march|strike)/i.test(text) && (/(?=.*storm)(?=.*government)|tear gas|rubber bullets|riot police|arrest|mass arrests|blocking major highway/i.test(text) || flags.arrests > 0), level: 3, cat: "Public Disruption", reason: "SOP: Protests involving police intervention (riot gear/tear gas), arrests, or blocking major infrastructure escalate to National Urgent." },
+            { id: "protest_local", trigger: (text, region, flags) => /(protest|rally|riot|demonstration|march|strike)/i.test(text) || /(local disruption)/i.test(text), level: 2, cat: "Public Disruption", reason: "SOP: The baseline threshold for planned or active public disruption (protest, rally) or localized disruptions is Local Urgent." },
+
+            // WILDFIRES MATRIX
+            { id: "wildfire_flash", trigger: (text, region, flags) => /(megafire|catastrophic wildfire|entire town destroyed|(?=.*trapped by fire)(?=.*(dozens|hundreds))|(?=.*wildfire)(?=.*mass casualty))/i.test(text), level: 5, cat: "Wildfires", reason: "SOP: Megafires, catastrophic destruction of populated towns, or mass casualties from wildfires trigger Flash." },
+            { id: "wildfire_global", trigger: (text, region, flags) => /(?=.*state of emergency)(?=.*wildfire)|(?=.*mass evacuation)(?=.*wildfire)|(?=.*wildfire)(?=.*approaching major city)/i.test(text), level: 4, cat: "Wildfires", reason: "SOP: States of emergency declared for wildfires or mass evacuations of major cities are Global Urgent." },
+            { id: "wildfire_national", trigger: (text, region, flags) => /(?=.*red flag warning)|(?=.*uncontrolled wildfire)|(?=.*multiple homes destroyed)(?=.*fire)|(?=.*wildfire)(?=.*forcing evacuations)/i.test(text), level: 3, cat: "Wildfires", reason: "SOP: Red Flag Warnings, uncontrolled wildfires forcing localized evacuations, or destruction of multiple structures are National Urgent." },
+            { id: "wildfire_local", trigger: (text, region, flags) => /(?=.*brush fire)(?=.*threatening)|(?=.*wildfire)(?=.*rapidly spreading)|(?=.*wildland fire)(?=.*(acres|hectares))/i.test(text), level: 2, cat: "Wildfires", reason: "SOP: Brush fires threatening structures, rapidly spreading wildland fires, or multi-acre fires are Local Urgent." },
+            { id: "wildfire_signal", trigger: (text, region, flags) => /(fire weather watch|contained brush fire|smoke advisory|(?=.*wildfire)(?=.*100% contained))/i.test(text), level: 1, cat: "Wildfires", reason: "SOP: Fire Weather Watches, smoke advisories, or contained brush fires default to Signal." },
+
+            // HURRICANES, TYPHOONS & TROPICAL STORMS
+            { id: "hurricane_flash", trigger: (text, region, flags) => /(?=.*category (3|4|5))(?=.*hurricane)|major hurricane|super typhoon|catastrophic storm surge/i.test(text), level: 5, cat: "Severe Weather", reason: "SOP: Major hurricanes (Cat 3+), super typhoons, or reports of catastrophic storm surge trigger Flash." },
+            { id: "hurricane_national", trigger: (text, region, flags) => /(hurricane warning|typhoon warning|cyclone warning|(?=.*category (1|2))(?=.*hurricane))/i.test(text), level: 3, cat: "Severe Weather", reason: "SOP: Active Hurricane, Typhoon, or Cyclone Warnings are National Urgent." },
+            { id: "tropical_storm_local", trigger: (text, region, flags) => /(tropical storm warning|hurricane watch|typhoon watch|cyclone watch)/i.test(text), level: 2, cat: "Severe Weather", reason: "SOP: Tropical Storm Warnings and Hurricane/Typhoon Watches are Local Urgent." },
+            { id: "tropical_storm_signal", trigger: (text, region, flags) => /(tropical storm watch|tropical depression|potential tropical cyclone)/i.test(text), level: 1, cat: "Severe Weather", reason: "SOP: Tropical Storm Watches or Tropical Depressions default to Signal." },
+
+            // AVIATION 
+            { id: "aviation_flash", trigger: (text, region, flags) => /(commercial plane crash|hijack|(?=.*active shooter)(?=.*airport)|mass casualty at terminal|mid-air collision)/i.test(text), level: 5, cat: "Aviation", reason: "SOP: Commercial crashes, hijackings, mid-air collisions, or airport active shooters trigger Flash." },
+            { id: "aviation_global", trigger: (text, region, flags) => /(attempted cockpit breach|cockpit breach|(?=.*flight (diverted|diversion))(?=.*(security|unruly|hostile))|(?=.*airport)(?=.*(suspended|shut down|closed))|flights suspended)/i.test(text), level: 4, cat: "Aviation", reason: "SOP: Attempted cockpit breaches, security-related flight diversions, or total airport suspensions escalate to Global Urgent." },
+            { id: "aviation_national", trigger: (text, region, flags) => /(?=.*drone sighting)(?=.*grounding)|large private jet crash/i.test(text), level: 3, cat: "Aviation", reason: "SOP: Drone-related flight groundings or large private jet crashes are National Urgent." },
+            { id: "aviation_local", trigger: (text, region, flags) => /(?=.*emergency landing)(?=.*technical)|runway incursion|small private plane crash/i.test(text), level: 2, cat: "Aviation", reason: "SOP: Technical emergency landings, runway incursions without collision, and minor private plane crashes are Local Urgent." },
+            { id: "aviation_signal", trigger: (text, region, flags) => /(minor flight delay|bird strike|medical diversion)/i.test(text), level: 1, cat: "Aviation", reason: "SOP: Routine aviation delays, bird strikes with no damage, or medical diversions are Signal." },
+
+            // MARITIME 
+            { id: "maritime_flash", trigger: (text, region, flags) => /(major vessel sinking|pirate attack|(?=.*oil spill)(?=.*shutting)|military vessel confrontation)/i.test(text), level: 5, cat: "Maritime", reason: "SOP: Major vessel sinkings, piracy, severe oil spills, or military maritime confrontations trigger Flash." },
+            { id: "maritime_national", trigger: (text, region, flags) => /(?=.*commercial ferry)(?=.*failure)|(?=.*cruise ship)(?=.*stranded)|(?=.*port strike)(?=.*blocking)/i.test(text), level: 3, cat: "Maritime", reason: "SOP: Stranded cruise ships/ferries due to tech failure or major port strikes are National Urgent." },
+            { id: "maritime_local", trigger: (text, region, flags) => /(small boat capsize|search (and|&) rescue|minor port fire)/i.test(text), level: 2, cat: "Maritime", reason: "SOP: Small boat capsizes requiring SAR or minor port fires are Local Urgent." },
+
+            // PUBLIC HEALTH & BIOHAZARD 
+            { id: "health_flash", trigger: (text, region, flags) => /(pandemic declared|PHEIC|deliberate biological attack|(?=.*mass fatalities)(?=.*unknown pathogen)|(?=.*ebola outbreak)(?=.*major city))/i.test(text), level: 5, cat: "Public Health", reason: "SOP: WHO Pandemic/PHEIC declarations, deliberate bio-attacks, or highly fatal unknown pathogens trigger Flash." },
+            { id: "health_national", trigger: (text, region, flags) => /(regional quarantine|rare infectious disease)/i.test(text), level: 3, cat: "Public Health", reason: "SOP: Regional quarantine mandates or new rare disease discoveries in untracked areas are National Urgent." },
+            { id: "health_local", trigger: (text, region, flags) => /(food poisoning outbreak|biohazard cleanup)/i.test(text), level: 2, cat: "Public Health", reason: "SOP: Localized food poisoning outbreaks or isolated biohazard cleanups are Local Urgent." },
+
+            // SPACE & SATELLITE 
+            { id: "space_flash", trigger: (text, region, flags) => /(?=.*space debris)(?=.*populated)|(?=.*destruction)(?=.*satellite)|manned spacecraft disaster/i.test(text), level: 5, cat: "Space & Satellite", reason: "SOP: Debris striking populated areas, destruction of critical satellites, or manned spacecraft disasters trigger Flash." },
+            { id: "space_national", trigger: (text, region, flags) => /(rocket launch failure|satellite collision)/i.test(text), level: 3, cat: "Space & Satellite", reason: "SOP: Launch failures or orbital collisions without ground impact are National Urgent." },
+            { id: "space_local", trigger: (text, region, flags) => /(?=.*space debris)(?=.*unpopulated)/i.test(text), level: 2, cat: "Space & Satellite", reason: "SOP: Space debris falling in unpopulated areas is Local Urgent." },
+
+            // CRITICAL INFRASTRUCTURE (Power/Water) 
+            { id: "infra_flash", trigger: (text, region, flags) => /(multi-state blackout|destruction of power grid|poisoned water supply)/i.test(text), level: 5, cat: "Infrastructure", reason: "SOP: Multi-state blackouts, poisoned water supplies, or deliberate destruction of grids trigger Flash." },
+            { id: "infra_national", trigger: (text, region, flags) => /(?=.*outage affecting)(?=.*(10k|10,000|tens of thousands))|(?=.*cyberattack)(?=.*disruption)/i.test(text), level: 3, cat: "Infrastructure", reason: "SOP: Outages affecting >10k people or cyber-induced temporary infrastructure disruptions are National Urgent." },
+            { id: "infra_local", trigger: (text, region, flags) => /(water boil advisory|unplanned outage)/i.test(text), level: 2, cat: "Infrastructure", reason: "SOP: Standard unplanned local outages or local water boil advisories are Local Urgent." },
+
+            // FINANCIAL & ECONOMIC 
+            { id: "finance_flash", trigger: (text, region, flags) => /(?=.*collapse)(?=.*banking system)|state default|stock exchange cyber takedown/i.test(text), level: 5, cat: "Financial", reason: "SOP: Total collapse of banking systems, state defaults, or stock exchange takedowns trigger Flash." },
+            { id: "finance_national", trigger: (text, region, flags) => /(run on a major bank|sudden currency devaluation)/i.test(text), level: 3, cat: "Financial", reason: "SOP: Runs on major national banks or sudden severe currency devaluations are National Urgent." },
+            { id: "finance_local", trigger: (text, region, flags) => /(bank branch robbery)/i.test(text), level: 2, cat: "Financial", reason: "SOP: Localized bank branch robberies are Local Urgent." },
+
+            // WILDLIFE & ANIMAL ATTACKS 
+            { id: "wildlife_flash", trigger: (text, region, flags) => /(mass fatal animal attack)/i.test(text), level: 5, cat: "Wildlife", reason: "SOP: Mass fatal animal attacks trigger Flash." },
+            { id: "wildlife_national", trigger: (text, region, flags) => /(zoo escape|(?=.*dangerous predators)(?=.*city))/i.test(text), level: 3, cat: "Wildlife", reason: "SOP: Zoo escapes involving dangerous predators or packs of predators in city centers are National Urgent." },
+
+            // WE/UK/FR TIERED VIOLENT CRIME MATRIX
+            { id: "we_uk_active_terror_flash", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(active shooter|terror|mass casualty|multiple fatalities)/i.test(text), level: 5, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Active shooters or terror incidents escalate instantly to Flash." },
+            { id: "we_uk_sensitive_global", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(?=.*(stabbing|stabbed|knife|shooting|gunshot|gunfire|shots fired|shot|gunman))(?=.*(tourist|landmark|museum|square|plaza|station|airport|transit|public space))/i.test(text), level: 4, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Shootings or stabbings in tourist areas, landmarks, or transit hubs escalate to Global Urgent." },
+            { id: "we_uk_shooting_national", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(shooting|gunshot|gunfire|shots fired|shot|gunman)/i.test(text), level: 3, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Baseline firearms incidents (shootings, shots fired) in Europe escalate to National Urgent due to weapon scarcity." },
+            { id: "we_uk_stabbing_local", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(stabbing|stabbed|knife|blade)/i.test(text), level: 2, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Baseline isolated stabbings establish a Local Urgent threshold." },
+
+            // RM ENGLISH CRIME & FIRES (Global Baselines)
+            { id: "fire_smoke_local_signal", trigger: (text, region, flags) => /smoke|possible fire/i.test(text) && !/injured|alarm|arson/i.test(text), level: 0, cat: "Fires & Collapses", reason: "SOP: Reports of smoke or possible fire with no active injuries default to Local Signal." },
+            { id: "fire_no_injury_signal", trigger: (text, region, flags) => /fire reported|house fire|building fire/i.test(text) && /no injuries|without injuries/i.test(text), level: 1, cat: "Fires & Collapses", reason: "SOP: Fires reported with no injuries explicitly default to Signal." },
+            { id: "fire_local_urgent", trigger: (text, region, flags) => /fire/i.test(text) && /(one-alarm|1-alarm|two-alarm|2-alarm|all-hands|massive fire|uncontrolled fire|injuries|arson investigation)/i.test(text), level: 2, cat: "Fires & Collapses", reason: "SOP: Fires involving a 1/2-alarm rating, all-hands declaration, uncontrolled status, arson investigation, or reported injuries are Local Urgent." },
+            { id: "fire_flash_upgrade", trigger: (text, region, flags) => /fire/i.test(text) && /(3-alarm|4-alarm|building collapse|individuals trapped|school|hospital)/i.test(text), level: 5, cat: "Fires & Collapses", reason: "SOP: 3+ alarm fires, building collapses, individuals trapped, or fires at schools/hospitals trigger Flash." },
+
+            { id: "non_active_local_urgent", trigger: (text, region, flags) => /(?=.*police)(?=.*(made an arrest|suspect in custody|secured the scene|briefing the media|identification of suspect|hospitalization))/i.test(text) || flags.arrests > 0, level: 2, cat: "Crime - Non-Active", reason: "SOP: Non-active crime scenes where arrests are made, suspects are in custody, scenes are secured, or hospitalizations occur are Local Urgent." },
+            { id: "active_crime_local_urgent", trigger: (text, region, flags) => /(shooting|gunfire|shots fired|shot|gunshot|gunman|stabbing|stabbed|robberies|armed robberies|hit-and-run crash|police pursuit|person barricaded)/i.test(text), level: 2, cat: "Crime - Active", reason: "SOP: Active crime events including shootings, stabbings, robberies, pursuits, or barricades establish a Local Urgent baseline." },
+            { id: "active_crime_upgrade", trigger: (text, region, flags) => /active shooter|terror attack|terrorist attack|assassination/i.test(text), level: 5, cat: "Crime - Active", reason: "SOP: Active shooter incidents, assassinations, or terror attacks automatically trigger Flash status." },
+
+            // SCHOOL & MALL LOCKDOWNS
+            { id: "lockdown_flash", trigger: (text, region, flags) => flags.lockdownType !== 'none' && flags.lockdownThreat === 'mass_kinetic', level: 5, cat: "School & Mall Lockdown", reason: "SOP: Active school/mall event with highly kinetic updates (multiple fatalities/injuries, or officer fatality during response) triggers Flash." },
+            { id: "lockdown_global_urgent", trigger: (text, region, flags) => flags.lockdownType !== 'none' && (flags.lockdownThreat === 'active_shooter' || /active shooter confirmed|students shot|staff shot|suspect detained|suspect shot/i.test(text)), level: 4, cat: "School & Mall Lockdown", reason: "SOP: Confirmed active shooter, suspect detained, or reports of students/staff shot inside school/mall triggers Global Urgent." },
+            { id: "lockdown_national_urgent", trigger: (text, region, flags) => flags.lockdownType !== 'none' && (flags.lockdownStatus === 'knockdown' || flags.lockdownStatus === 'active' || /shootout|fled the scene|police search|lockdown lifted|no active shooter|knockdown/i.test(text)), level: 3, cat: "School & Mall Lockdown", reason: "SOP: Confirmed reports of lockdown, active police search for suspect who fled, or knockdown confirming no active shooter triggers National Urgent." },
+            { id: "lockdown_local_urgent", trigger: (text, region, flags) => flags.lockdownType !== 'none' && (flags.lockdownStatus === 'police_scene' || flags.lockdownThreat === 'shots_heard' || /shots heard|rifles|guns|swat|police on scene|evacuation/i.test(text)), level: 2, cat: "School & Mall Lockdown", reason: "SOP: Shots heard, police seen with rifles/guns, SWAT deployment, or non-kinetic police presence on scene triggers Local Urgent." },
+
+            // CYBERSECURITY
+            { id: "cyber_healthcare", trigger: (text, region, flags) => flags.cyber === 'healthcare' || /(?=.*(healthcare|hospital|medical))(?=.*(data security|data breach|leak|cyberattack|hack))/i.test(text), level: 5, cat: "Cybersecurity", reason: "SOP: Any healthcare data security incident (big or small) is an automatic Flash/Upgrade." },
+            { id: "cyber_ransomware", trigger: (text, region, flags) => flags.cyber === 'ransomware' || /(?=.*ransomware)(?=.*(attack|infect|compromise))/i.test(text), level: 5, cat: "Cybersecurity", reason: "SOP: Active ransomware attacks on key networks or systems trigger Flash/Upgrade." },
+            { id: "cyber_large_scale", trigger: (text, region, flags) => flags.cyber === 'large_scale' || /(?=.*(cyberattack|data breach|hack))(?=.*(public entit|government|trading platform|financial system|nato|bank))/i.test(text), level: 5, cat: "Cybersecurity", reason: "SOP: Large-scale cyberattacks targeting public entities, trading platforms, financial systems, or NATO countries trigger Flash/Upgrade." },
+            
+            // CORPORATE GUIDANCE 
+            { id: "corp_merger_upgrade", trigger: (text, region, flags) => flags.corp === 'merger_major' || (/(?=.*(buying|merger|acquisition|buy|merge))(?=.*(apple|google|microsoft|sony|playstation))/i.test(text)), level: 5, cat: "Corporate", reason: "SOP: Multi-billion mergers or key acquisitions among core competitors in small fields trigger Flash." },
+            { id: "corp_c_suite_upgrade", trigger: (text, region, flags) => flags.corp === 'c_suite_resign' || (/(?=.*(c-suite|resign|resigns|resignation|step down))(?=.*(tim cook|cook|ceo.*apple|ceo.*google|ceo.*microsoft))/i.test(text)), level: 5, cat: "Corporate", reason: "SOP: C-Suite resignations at globally recognizable corporate powerhouses trigger Flash." },
+            { id: "corp_shutdown_upgrade", trigger: (text, region, flags) => flags.corp === 'mass_layoffs' || /(?=.*reduce workforce)|(?=.*layoff)(?=.*10%)|(?=.*lay off)(?=.*employees)|(?=.*shut down all plants)/i.test(text), level: 5, cat: "Corporate", reason: "SOP: Concentrated geographic shutdown of entire regional workforce or >= 10% mass layoffs triggers Flash." },
+            { id: "crisk_exec_threat", trigger: (text, region, flags) => flags.crisk === 'crisk_exec' || /(?=.*threat)(?=.*(kill|harm| Bezos| CEO|executive))/i.test(text), level: 5, cat: "Corporate Risk", reason: "SOP: Direct threat post made against a CRisk company executive (e.g. CEO) is an automatic Flash upgrade." },
+
+            // LATAM SPECIAL CRIME GRID
+            { id: "latam_us_kidnap", trigger: (text, region, flags) => region === 'LATAM' && (flags.usCitizen || /us citizen|kidnapping of foreign citizen|abduct.*foreigner/i.test(text)), level: 5, cat: "LATAM Crime", reason: "SOP: Any violent crime in LATAM involving a US citizen, or kidnapping of foreign nationals, is always an automatic Flash upgrade." },
+            { id: "latam_violent_upgrade", trigger: (text, region, flags) => region === 'LATAM' && (flags.fatalities >= 2 || flags.injuries >= 4 || /(?=.*2\+ killed)|(?=.*4\+ injured)/i.test(text)), level: 5, cat: "LATAM Crime", reason: "SOP: Violent crime in LATAM resulting in 2+ fatalities and/or 4+ injuries escalates to Flash." },
+            
+            // FRANCE & GERMANY SPECIALIZED MINIMUMS 
+            { id: "fr_de_police_op", trigger: (text, region, flags) => (region === 'FR' || region === 'WE') && (flags.specialForces || /GIGN|RAID|BRI|GSG\s?9|SEK/i.test(text)) && /(counter-terror|hostage|shootout|shots fired)/i.test(text), level: 5, cat: "FR/DE Tactical", reason: "SOP: French/German specialized tactical deployments (GIGN, RAID, GSG 9, etc.) in active counters or firefights trigger Flash." },
+            { id: "fr_de_police_base", trigger: (text, region, flags) => (region === 'FR' || region === 'WE') && (flags.specialForces || /GIGN|RAID|BRI|GSG\s?9|SEK/i.test(text)), level: 3, cat: "FR/DE Tactical", reason: "SOP: Any deployment of French GIGN, RAID, BRI, or German GSG 9/SEK establishes a National Urgent baseline." }
+        ];
+
+        // --- GEMINI VISION AI LOGIC ---
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        async function analyzeImageWithGemini(base64Data, mimeType) {
+            if (!apiKey) {
+                return "[AI Vision Analysis Disabled: API key missing in environment. Proceeding with text-only evaluation.]";
+            }
+
+            const prompt = `You are a strict global security, risk, and emergency thresholding analyst. Look closely at this image/frame. 
+            1. Provide a 1-sentence description of the event.
+            2. Output a comma-separated list of highly specific keywords that indicate the kinetic severity of the event.
+            You MUST use terms that match risk SOPs: 'massive fire', 'structural collapse', 'riot police', 'weapons visible', 'active shooter', 'flooding', 'mass casualty', 'uncontrolled fire', 'structural damage', 'tens of thousands', 'clashes'.`;
+
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: prompt },
+                        { inlineData: { mimeType: mimeType, data: base64Data } }
+                    ]
+                }],
+                systemInstruction: {
+                    parts: [{ text: "You are a specialized risk analyst extracting keywords for a regex SOP engine. Be direct and utilize standard incident nomenclature." }]
+                }
+            };
+
+            try {
+                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No actionable insights extracted from image.";
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "[Error reaching Gemini Vision API. Falling back to text analysis only.]";
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            uploadStatus.innerText = file.name;
+            visionOutputContainer.classList.remove('hidden');
+            aiContextBox.value = "";
+            visionLoading.classList.remove('hidden');
+            visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing media file...';
+            lucide.createIcons();
+
+            if (file.type.startsWith('video/')) {
+                // VIDEO: Client-Side Keyframe Extraction
+                visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Extracting key frame from video...';
+                lucide.createIcons();
+                
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(file);
+                video.muted = true;
+                video.crossOrigin = 'anonymous';
+                
+                video.onloadedmetadata = () => {
+                    // Seek slightly into the video to avoid black intro frames
+                    video.currentTime = Math.min(2, video.duration * 0.2); 
+                };
+                
+                video.onseeked = async () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    const dataUrl = canvas.toDataURL('image/jpeg');
+                    imagePreview.src = dataUrl;
+                    
+                    const base64String = dataUrl.split(',')[1];
+                    
+                    visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Gemini Vision is analyzing the frame...';
+                    lucide.createIcons();
+                    
+                    const aiResult = await analyzeImageWithGemini(base64String, 'image/jpeg');
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = aiResult;
+                    
+                    runAnalysis();
+                };
+                
+                video.onerror = () => {
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = "[Error: Could not extract frame from video file.]";
+                };
+
+            } else {
+                // IMAGE: Standard Processing
+                visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Gemini Vision is analyzing the scene...';
+                lucide.createIcons();
+                
+                imagePreview.src = URL.createObjectURL(file);
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const base64String = e.target.result.split(',')[1];
+                    const mimeType = file.type;
+                    
+                    const aiResult = await analyzeImageWithGemini(base64String, mimeType);
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = aiResult;
+                    
+                    runAnalysis();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function extractTextFromContent(text, aiContext = "") {
+            let processedText = text + " " + aiContext;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const urls = text.match(urlRegex);
+            if (urls && text.trim() === urls[0]) {
+                urlWarning.classList.remove('hidden');
+            } else {
+                urlWarning.classList.add('hidden');
+            }
+            if (urls) {
+                urls.forEach(url => {
+                    try {
+                        const parsed = new URL(url);
+                        const urlWords = parsed.pathname.replace(/[\/\-_]/g, ' ') + " " + parsed.hostname.replace(/\./g, ' ');
+                        processedText += " " + urlWords;
+                    } catch(e) {}
+                });
+            }
+            return processedText;
+        }
+
+        function evaluateContent() {
+            const text = inputEl.value;
+            const aiContext = aiContextBox.value;
+            const region = regionEl.value;
+            
+            const flags = {
+                fatalities: parseInt(fatalityInput.value) || 0,
+                injuries: parseInt(injuryInput.value) || 0,
+                arrests: parseInt(arrestInput.value) || 0,
+                trafficked: parseInt(trafficInput.value) || 0,
+                usCitizen: usCitizenCheck.checked,
+                specialForces: specialForcesCheck.checked,
+                landmark: landmarkCheck.checked,
+                crisk: criskEl.value,
+                cyber: cyberEl.value,
+                corp: corpEl.value,
+                lockdownType: lockdownLocation.value,
+                lockdownStatus: lockdownStatus.value,
+                lockdownThreat: lockdownThreat.value
+            };
+
+            const textToAnalyze = extractTextFromContent(text, aiContext);
+            let triggeredRules = [];
+            let highestLevel = 1; // Default to Signal baseline if text entered
+            let primaryCategory = "General";
+
+            // Run strict validation rule matrix against both Text and Vision AI Context
+            sopRules.forEach(rule => {
+                if (rule.trigger(textToAnalyze, region, flags)) {
+                    triggeredRules.push(rule);
+                    if (rule.level > highestLevel) {
+                        highestLevel = rule.level;
+                        primaryCategory = rule.cat;
+                    }
+                }
+            });
+
+            // UPDATED Multi-casualty Overrides (3+ fatalities OR 5+ injuries = Flash)
+            if (flags.fatalities >= 3 || flags.injuries >= 5) {
+                triggeredRules.push({
+                    level: 5,
+                    cat: "Casualty Baseline",
+                    reason: "SOP: Mass casualty incident involving 3+ fatalities or 5+ injuries forces Flash Upgrade."
+                });
+                highestLevel = 5;
+                primaryCategory = "Casualties";
+            } else if (flags.fatalities >= 1 && highestLevel < 2) {
+                triggeredRules.push({
+                    level: 2,
+                    cat: "Casualty Baseline",
+                    reason: "SOP: Confirmed fatalities establish a baseline Local Urgent threshold."
+                });
+                highestLevel = 2;
+                primaryCategory = "Casualties";
+            }
+
+            // Standard Fallbacks
+            if (triggeredRules.length === 0) {
+                if (text.trim().length > 0 || aiContext.trim().length > 0) {
+                    triggeredRules.push({
+                        level: 1,
+                        cat: "Baseline Monitoring",
+                        reason: "SOP Default: Event matches regular Signal baseline tracking. No major kinetic, corporate, or weather variables triggered."
+                    });
+                    highestLevel = 1;
+                    primaryCategory = "Baseline";
+                } else {
+                    highestLevel = 0; // Local Signal baseline if completely empty
+                }
+            }
+
+            const levels = ["Local Signal", "Signal", "Local Urgent", "National Urgent", "Global Urgent", "Flash"];
+            const colors = [
+                "bg-slate-100 text-slate-800 border-slate-300", 
+                "bg-blue-50 text-blue-800 border-blue-300", 
+                "bg-yellow-50 text-yellow-800 border-yellow-400", 
+                "bg-orange-50 text-orange-800 border-orange-400", 
+                "bg-purple-50 text-purple-800 border-purple-400", 
+                "bg-red-50 text-red-800 border-red-500 animate-pulse"
+            ];
+
+            triggeredRules.sort((a, b) => b.level - a.level);
+
+            return {
+                levelText: levels[highestLevel],
+                colorClass: colors[highestLevel],
+                matches: triggeredRules,
+                category: primaryCategory
+            };
+        }
+
+        // --- UI LOGIC & AUTO-REFRESH ---
+        let analyzeTimeout;
+
+        function runAnalysis() {
+            const text = inputEl.value;
+            const aiContext = aiContextBox.value;
+            const activeOverrides = (
+                fatalityInput.value > 0 || injuryInput.value > 0 || 
+                arrestInput.value > 0 || trafficInput.value > 0 || 
+                usCitizenCheck.checked || specialForcesCheck.checked || landmarkCheck.checked ||
+                lockdownLocation.value !== 'none' || lockdownStatus.value !== 'none' ||
+                lockdownThreat.value !== 'none' || cyberEl.value !== 'none' || corpEl.value !== 'none'
+            );
+
+            if (!text.trim() && !aiContext.trim() && !activeOverrides) {
+                emptyState.classList.remove('hidden');
+                resultState.classList.add('hidden');
+                loadingState.classList.add('hidden');
+                urlWarning.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            resultState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            setTimeout(() => {
+                const res = evaluateContent();
+                
+                labelCard.className = `border-l-4 p-4 md:p-5 rounded-r-xl shadow-md transition-all ${res.colorClass}`;
+                labelTitle.innerText = res.levelText;
+                labelCategory.innerText = `Category: ${res.category}`;
+
+                rulesList.innerHTML = '';
+                
+                const uniqueReasons = new Set();
+                res.matches.forEach(match => {
+                    if (!uniqueReasons.has(match.reason)) {
+                        uniqueReasons.add(match.reason);
+                        
+                        const iconColor = match.level === 5 ? 'text-red-500' : match.level === 4 ? 'text-purple-500' : match.level === 3 ? 'text-orange-500' : match.level === 2 ? 'text-yellow-500' : 'text-blue-400';
+                        const targetNames = ["Local Signal", "Signal Baseline", "Local Urgent", "National Urgent", "Global Urgent", "Flash"];
+                        
+                        const li = document.createElement('li');
+                        li.className = "flex items-start gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 shadow-sm";
+                        li.innerHTML = `
+                            <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0 mt-0.5 ${iconColor}"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-slate-800 block leading-tight">${match.reason}</span>
+                                <span class="text-[11px] text-slate-500 mt-1.5 block font-medium uppercase tracking-wider">Applies to Matrix Tier: ${targetNames[match.level]}</span>
+                            </div>
+                        `;
+                        rulesList.appendChild(li);
+                    }
+                });
+
+                loadingState.classList.add('hidden');
+                resultState.classList.remove('hidden');
+                lucide.createIcons();
+            }, 300);
+        }
+
+        const inputsToListen = [
+            inputEl, regionEl, criskEl, cyberEl, corpEl, 
+            fatalityInput, injuryInput, arrestInput, trafficInput, 
+            usCitizenCheck, specialForcesCheck, landmarkCheck,
+            lockdownLocation, lockdownStatus, lockdownThreat
+        ];
+        
+        inputsToListen.forEach(elem => {
+            elem.addEventListener('input', () => { clearTimeout(analyzeTimeout); analyzeTimeout = setTimeout(runAnalysis, 400); });
+            elem.addEventListener('change', () => { clearTimeout(analyzeTimeout); analyzeTimeout = setTimeout(runAnalysis, 100); });
+        });
+
+        // Initialize empty
+        runAnalysis();
+
+        function switchTab(category) {
+            document.querySelectorAll('.scenario-panel').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.className = "tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0");
+            
+            document.getElementById(`scenario-${category}`).classList.remove('hidden');
+            document.getElementById(`tab-${category}`).className = "tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm shrink-0";
+        }
+
+        function loadDemo(type) {
+            fatalityInput.value = 0; injuryInput.value = 0; arrestInput.value = 0; trafficInput.value = 0;
+            usCitizenCheck.checked = false; specialForcesCheck.checked = false; landmarkCheck.checked = false;
+            criskEl.value = 'none'; cyberEl.value = 'none'; corpEl.value = 'none';
+            lockdownLocation.value = 'none'; lockdownStatus.value = 'none'; lockdownThreat.value = 'none';
+
+            // Demos
+            if (type === 'pol_flash') {
+                inputEl.value = "Breaking: The President has suffered a severe medical emergency and is currently in critical condition at the hospital.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_global') {
+                inputEl.value = "Tragic news as a sitting Supreme Court Justice has passed away unexpectedly this morning.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_national') {
+                inputEl.value = "A prominent sitting Senator has just faced a formal indictment on federal corruption charges.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_local') {
+                inputEl.value = "Several polling place closures reported due to election disruption and protests at the state capitol.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'space_debris') {
+                inputEl.value = "Warning: Large fragments of space debris have struck a populated residential area causing structural damage.";
+                regionEl.value = 'USCAN';
+                arrestInput.value = 1;
+            } else if (type === 'mass_casualty_injuries') {
+                inputEl.value = "Paramedics on scene confirming 6 people have been severely injured following the incident.";
+                regionEl.value = 'USCAN';
+                injuryInput.value = 6;
+            } else if (type === 'amber_alert_local') {
+                inputEl.value = "An AMBER Alert has been issued for a missing 7-year-old child last seen near the downtown area.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'manhunt_national') {
+                inputEl.value = "Authorities have launched a multi-state manhunt for the suspect involved in yesterday's incident.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'kidnap_flash') {
+                inputEl.value = "Breaking: Armed suspects have kidnapped a US citizen traveling in the region. Embassy notified.";
+                regionEl.value = 'LATAM';
+                usCitizenCheck.checked = true;
+            } else if (type === 'landmark_fire') {
+                inputEl.value = "https://redlib.catsarch.com/r/Calgary/comments/1trhrk2/beltline_fire_took_photo_around_calgary_arts/";
+                regionEl.value = 'USCAN';
+                landmarkCheck.checked = true;
+            } else if (type === 'eq_flash') {
+                inputEl.value = "A catastrophic earthquake measuring magnitude 7.4 has struck the capital. Multiple buildings collapsed.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'eq_national') {
+                inputEl.value = "USGS reports a magnitude 6.2 earthquake offshore. Moderate damage expected.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'flood_flash') {
+                inputEl.value = "NWS issues catastrophic Flash Flood Emergency. Dam failure imminent, entire town submerged.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'flood_local') {
+                inputEl.value = "Flash Flood Warning issued for the county. Minor street flooding reported.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'nyc_times_square_flash') {
+                inputEl.value = "Reports of an active shooter in Times Square. Heavy NYPD presence and mass casualties reported.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_nypd_level4') {
+                inputEl.value = "NYPD has called a Level 4 mobilization citywide following a series of coordinated attacks.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_nypd_level3') {
+                inputEl.value = "NYPD has called a Level 3 mobilization for a large unpermitted protest moving through lower Manhattan.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_gw_bridge') {
+                inputEl.value = "The George Washington Bridge is fully shut down in both directions due to a suspicious package.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_mta_stabbing') {
+                inputEl.value = "NYPD responding to a slashing/stabbing on a northbound A train at 14th Street. MTA subway service disrupted.";
+                regionEl.value = 'NYC';
+            } else if (type === 'cbrn_flash') {
+                inputEl.value = "Military units responding to confirmed radiation leak / potential biological attack at the facility. Massive toxic cloud visible.";
+                regionEl.value = 'WE';
+            } else if (type === 'hazmat_national') {
+                inputEl.value = "Overturned hazmat truck causing a major chemical spill on the highway. Mandatory evacuation of a 2-mile radius.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'rail_flash') {
+                inputEl.value = "Mass casualty incident: High-speed passenger train derailment reported outside the main terminal.";
+                regionEl.value = 'FR';
+            } else if (type === 'rail_national') {
+                inputEl.value = "Entire city subway system suspended following a major power failure and freight train derailment.";
+                regionEl.value = 'UK';
+            } else if (type === 'tornado_emergency') {
+                inputEl.value = "NWS has issued a Tornado Emergency for the greater metropolitan area. A large, violent tornado is on the ground.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pds_tornado') {
+                inputEl.value = "Particularly Dangerous Situation (PDS) Tornado Warning issued for an area with a population exceeding 50,000 residents.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'tornado_warning') {
+                inputEl.value = "The National Weather Service has issued a Tornado Warning for the county. Seek shelter immediately.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'hurricane_flash') {
+                inputEl.value = "The NHC warns that a Category 4 Major Hurricane is approaching the coast with catastrophic storm surge expected upon landfall.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'tropical_storm_local') {
+                inputEl.value = "A Tropical Storm Warning has been officially issued for the coastal counties ahead of the approaching system.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'volcano_flash') {
+                inputEl.value = "Authorities have issued a Volcanic Ash Advisory (VAA) warning of significant aviation impacts across the region.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'unrest_insurgency') {
+                inputEl.value = "Reports of an active military coup underway as armed insurgents seize the national broadcasting station.";
+                regionEl.value = 'LATAM';
+            } else if (type === 'protest_clashes') {
+                inputEl.value = "Severe clashes reported at the ongoing protest outside the terminal. Major disruptions are occurring and multiple flights canceled as the crowd grows.";
+                regionEl.value = 'WE';
+            } else if (type === 'protest_arrests') {
+                inputEl.value = "Police are making numerous arrests at the unpermitted demonstration currently blocking the central intersection.";
+                regionEl.value = 'USCAN';
+                arrestInput.value = 5;
+            } else if (type === 'protest_local') {
+                inputEl.value = "A planned public rally and demonstration is scheduled for tomorrow afternoon. Expect minor local disruptions and traffic delays.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'infra_blackout') {
+                inputEl.value = "A multi-state blackout has plunged the eastern seaboard into darkness.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'finance_bank_run') {
+                inputEl.value = "Panic in the markets: Citizens forming massive lines indicating a run on a major national bank.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_flash') {
+                inputEl.value = "Catastrophic wildfire has completely engulfed the valley, with an entire town destroyed and dozens reported trapped by the flames.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_national') {
+                inputEl.value = "The NWS has issued a Red Flag Warning for the state. A new uncontrolled wildfire is forcing evacuations in the foothills.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_local') {
+                inputEl.value = "Fire crews are on scene of a 50-acre brush fire that is rapidly spreading and threatening nearby suburban structures.";
+                regionEl.value = 'ANZ';
+            } else if (type === 'wildfire_signal') {
+                inputEl.value = "Authorities have issued a Fire Weather Watch for the weekend due to low humidity and high winds. Yesterday's brush fire is now 100% contained.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'aviation_crash') {
+                inputEl.value = "Breaking: A commercial plane crash has been reported shortly after takeoff. Emergency crews rushing to scene.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'aviation_cockpit') {
+                inputEl.value = "Attempted cockpit breach onboard UA2005. Flight diverted due to severe security incident.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'maritime_pirate') {
+                inputEl.value = "Distress signal received: A cargo vessel is currently under an active pirate attack off the coast.";
+                regionEl.value = 'LATAM';
+            } else if (type === 'aviation_drone') {
+                inputEl.value = "Multiple drone sightings have forced the temporary grounding of flights at the international airport.";
+                regionEl.value = 'WE';
+            } else if (type === 'maritime_ferry') {
+                inputEl.value = "A commercial ferry is stranded at sea with 300 passengers onboard due to complete engine failure.";
+                regionEl.value = 'ANZ';
+            } else if (type === 'mall_highly_kinetic') {
+                inputEl.value = "Highly kinetic updates: Stabbing incident at Macy's Westfield Mall has escalated with reports of a police officer fatality and multiple civilian injuries during the active response.";
+                regionEl.value = 'USCAN';
+                lockdownLocation.value = 'mall'; lockdownStatus.value = 'active'; lockdownThreat.value = 'mass_kinetic';
+            } else if (type === 'school_confirmed_active') {
+                inputEl.value = "Confirmation of an active shooter inside the main building of the university campus. First responders are on scene, lockdown protocols active.";
+                regionEl.value = 'USCAN';
+                lockdownLocation.value = 'school'; lockdownStatus.value = 'active'; lockdownThreat.value = 'active_shooter';
+            } else if (type === 'hospital_breach') {
+                inputEl.value = "Active cybersecurity ransomware variant detected targeting patient healthcare records inside the medical center database.";
+                regionEl.value = 'USCAN';
+                cyberEl.value = 'healthcare';
+            }
+            
+            runAnalysis();
+        }
+    </script>
+</body>
+</html>
