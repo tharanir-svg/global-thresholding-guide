@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Event Thresholding Analyzer v11.0 (Enterprise Crypto)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .demo-scroll::-webkit-scrollbar { height: 6px; }
+        .demo-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .demo-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .demo-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .tab-btn { transition: all 0.2s ease-in-out; }
+        
+        /* Blur overlay for locked state */
+        .locked-blur { filter: blur(8px); pointer-events: none; user-select: none; }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.right-0{right:0px}.top-0{top:0px}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-\[100\]{z-index:100}.order-first{order:-9999}.col-span-1{grid-column:span 1 / span 1}.mx-auto{margin-left:auto;margin-right:auto}.mb-1\.5{margin-bottom:0.375rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mt-0\.5{margin-top:0.125rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-20{height:5rem}.h-24{height:6rem}.h-32{height:8rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-8{height:2rem}.h-auto{height:auto}.h-full{height:100%}.max-h-\[85vh\]{max-height:85vh}.min-h-\[100px\]{min-height:100px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-16{width:4rem}.w-20{width:5rem}.w-24{width:6rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-8{width:2rem}.w-full{width:100%}.max-w-\[1400px\]{max-width:1400px}.max-w-\[200px\]{max-width:200px}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.shrink-0{flex-shrink:0}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}@keyframes spin{to{transform:rotate(360deg)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.break-words{overflow-wrap:break-word}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-r-xl{border-top-right-radius:0.75rem;border-bottom-right-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-l-4{border-left-width:4px}.border-t{border-top-width:1px}.border-indigo-100{--tw-border-opacity:1;border-color:rgb(224 231 255 / var(--tw-border-opacity, 1))}.border-indigo-200{--tw-border-opacity:1;border-color:rgb(199 210 254 / var(--tw-border-opacity, 1))}.border-indigo-200\/50{border-color:rgb(199 210 254 / 0.5)}.border-indigo-300{--tw-border-opacity:1;border-color:rgb(165 180 252 / var(--tw-border-opacity, 1))}.border-indigo-900\/30{border-color:rgb(49 46 129 / 0.3)}.border-orange-200{--tw-border-opacity:1;border-color:rgb(254 215 170 / var(--tw-border-opacity, 1))}.border-purple-200{--tw-border-opacity:1;border-color:rgb(233 213 255 / var(--tw-border-opacity, 1))}.border-red-200{--tw-border-opacity:1;border-color:rgb(254 202 202 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-yellow-200{--tw-border-opacity:1;border-color:rgb(254 240 138 / var(--tw-border-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-50{--tw-bg-opacity:1;background-color:rgb(238 242 255 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237 / var(--tw-bg-opacity, 1))}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-red-50{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.bg-red-600{--tw-bg-opacity:1;background-color:rgb(220 38 38 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/90{background-color:rgb(15 23 42 / 0.9)}.bg-slate-950{--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-yellow-50{--tw-bg-opacity:1;background-color:rgb(254 252 232 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-8{padding:2rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.pr-2{padding-right:0.5rem}.pt-2{padding-top:0.5rem}.pt-5{padding-top:1.25rem}.text-center{text-align:center}.font-sans{font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[11px\]{font-size:11px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-emerald-500{--tw-text-opacity:1;color:rgb(16 185 129 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-indigo-400{--tw-text-opacity:1;color:rgb(129 140 248 / var(--tw-text-opacity, 1))}.text-indigo-500{--tw-text-opacity:1;color:rgb(99 102 241 / var(--tw-text-opacity, 1))}.text-indigo-600{--tw-text-opacity:1;color:rgb(79 70 229 / var(--tw-text-opacity, 1))}.text-indigo-700{--tw-text-opacity:1;color:rgb(67 56 202 / var(--tw-text-opacity, 1))}.text-indigo-800{--tw-text-opacity:1;color:rgb(55 48 163 / var(--tw-text-opacity, 1))}.text-indigo-900{--tw-text-opacity:1;color:rgb(49 46 129 / var(--tw-text-opacity, 1))}.text-orange-600{--tw-text-opacity:1;color:rgb(234 88 12 / var(--tw-text-opacity, 1))}.text-orange-700{--tw-text-opacity:1;color:rgb(194 65 12 / var(--tw-text-opacity, 1))}.text-purple-600{--tw-text-opacity:1;color:rgb(147 51 234 / var(--tw-text-opacity, 1))}.text-purple-700{--tw-text-opacity:1;color:rgb(126 34 206 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-red-700{--tw-text-opacity:1;color:rgb(185 28 28 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-yellow-700{--tw-text-opacity:1;color:rgb(161 98 7 / var(--tw-text-opacity, 1))}.opacity-10{opacity:0.1}.opacity-90{opacity:0.9}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-inner{--tw-shadow:inset 0 2px 4px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:inset 0 2px 4px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-shadow{transition-property:box-shadow;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-100:hover{--tw-bg-opacity:1;background-color:rgb(224 231 255 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-700:hover{--tw-bg-opacity:1;background-color:rgb(67 56 202 / var(--tw-bg-opacity, 1))}.hover\:bg-orange-100:hover{--tw-bg-opacity:1;background-color:rgb(255 237 213 / var(--tw-bg-opacity, 1))}.hover\:bg-purple-100:hover{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.hover\:bg-red-100:hover{--tw-bg-opacity:1;background-color:rgb(254 226 226 / var(--tw-bg-opacity, 1))}.hover\:bg-red-50:hover{--tw-bg-opacity:1;background-color:rgb(254 242 242 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-yellow-100:hover{--tw-bg-opacity:1;background-color:rgb(254 249 195 / var(--tw-bg-opacity, 1))}.focus\:border-indigo-500:focus{--tw-border-opacity:1;border-color:rgb(99 102 241 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-emerald-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(16 185 129 / var(--tw-ring-opacity, 1))}.focus\:ring-indigo-400:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(129 140 248 / var(--tw-ring-opacity, 1))}.focus\:ring-indigo-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(99 102 241 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:mb-0{margin-bottom:0px}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:flex{display:flex}.md\:max-w-\[300px\]{max-width:300px}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:p-5{padding:1.25rem}.md\:p-6{padding:1.5rem}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 1024px){.lg\:sticky{position:sticky}.lg\:top-24{top:6rem}.lg\:order-last{order:9999}.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:gap-8{gap:2rem}}</style></head>
+<body class="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-800">
+
+    <!-- SECURITY OVERLAY (Visible when Encrypted Payload exists) -->
+    <div id="securityOverlay" class="hidden fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full border border-slate-200 text-center fade-in">
+            <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="lock" aria-hidden="true" class="lucide lucide-lock w-10 h-10 text-indigo-600"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <h2 class="text-2xl font-black text-slate-900 mb-2">Secured Enclave</h2>
+            <p class="text-sm text-slate-500 mb-6">This dashboard's SOP matrices are secured with AES-256 encryption. Enter the master password to decrypt the engine into local memory.</p>
+            
+            <input type="password" id="decryptPassword" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none mb-4 text-center font-bold tracking-widest text-slate-800" placeholder="••••••••">
+            
+            <p id="decryptError" class="text-xs text-red-600 font-bold mb-4 hidden">Incorrect password or corrupted payload.</p>
+            
+            <button onclick="attemptDecryption()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="unlock" aria-hidden="true" class="lucide lucide-unlock w-5 h-5"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> Decrypt &amp; Unlock Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- DEV MODE SETUP BANNER -->
+    <div id="devBanner" class="bg-red-600 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between shadow-md z-40">
+        <div class="flex items-center gap-3 mb-2 sm:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-triangle" aria-hidden="true" class="lucide lucide-alert-triangle w-5 h-5 animate-pulse"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            <span class="text-sm font-semibold tracking-wide">UNSECURED DEV MODE: SOPs are currently readable in the source code.</span>
+        </div>
+        <button onclick="openSetupModal()" class="bg-white text-red-700 hover:bg-red-50 px-4 py-1.5 rounded-md text-xs font-bold shadow-sm transition-colors flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check w-4 h-4"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg> Lock &amp; Secure Dashboard
+        </button>
+    </div>
+
+    <!-- SETUP MODAL -->
+    <div id="setupModal" class="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-sm flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full border border-slate-200 fade-in">
+            <h2 class="text-xl font-black text-slate-900 mb-2 flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-check" aria-hidden="true" class="lucide lucide-shield-check w-6 h-6 text-emerald-600"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg> Secure Dashboard</h2>
+            <p class="text-xs text-slate-500 mb-6 leading-relaxed">This will encrypt the hardcoded SOP rules using AES-256 and generate a new HTML file. The readable rules will be permanently deleted from the source code of the new file.</p>
+            
+            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Set Master Password</label>
+            <input type="password" id="setupPassword" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none mb-6 text-center font-bold tracking-widest text-slate-800">
+            
+            <div class="flex gap-3">
+                <button onclick="closeSetupModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 px-4 rounded-lg transition-colors">Cancel</button>
+                <button onclick="encryptAndDownload()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="download" aria-hidden="true" class="lucide lucide-download w-4 h-4"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg> Encrypt &amp; Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="mainAppWrapper" class="flex flex-col flex-1 w-full">
+        <!-- HEADER -->
+        <header class="bg-slate-950 text-white p-4 shadow-lg flex items-center justify-between border-b border-indigo-900/30 sticky top-0 z-30">
+            <div class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield-alert" aria-hidden="true" class="lucide lucide-shield-alert w-8 h-8 text-indigo-400 flex-shrink-0"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wide leading-tight">Global Event Thresholding Analyzer</h1>
+                    <p class="text-xs text-indigo-400 font-medium">SOP Master System v11.0 (Enterprise Crypto Edition)</p>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center gap-2 text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 shadow-inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="cpu" aria-hidden="true" class="lucide lucide-cpu w-4 h-4 text-indigo-400 animate-pulse"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg>
+                <span class="text-indigo-400 font-medium">AES-256 Engine Engaged</span>
+            </div>
+        </header>
+
+        <main class="flex-1 max-w-[1400px] w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+            
+            <!-- LEFT COLUMN: Inputs & SOP Variables -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- STEP 1: CORE PARAMETERS -->
+                <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="map-pin" aria-hidden="true" class="lucide lucide-map-pin w-5 h-5 text-indigo-500"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        1. Core Incident Parameters
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Target Region</label>
+                            <select id="regionSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                <option value="USCAN">USCAN (USA / Canada) - Baseline</option>
+                                <option value="NYC">New York City (NYC) - Hyperlocal</option>
+                                <option value="WE">Western Europe (WE) - High Sensitivity</option>
+                                <option value="UK">United Kingdom (UK) - Hyperlocal</option>
+                                <option value="ANZ">Australia / New Zealand (ANZ) - Event Detection</option>
+                                <option value="FR">France / Germany Minimum Modifiers</option>
+                                <option value="LATAM">Latin America (LATAM) - Crime Grid</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Corporate / Asset Scope</label>
+                            <select id="criskSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                <option value="none">Standard Public Event</option>
+                                <option value="crisk_asset">Impacts CRisk Company Asset (Starbucks, Factory, etc.)</option>
+                                <option value="crisk_exec">Direct Threat to CRisk Executive (CEO / Founder)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Pasted Content, News Lead, or URL</label>
+                        <textarea id="inputText" class="w-full h-32 p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all resize-none text-slate-700 text-sm shadow-inner leading-relaxed" placeholder="Paste live social feeds, news agency slugs, or scanner logs here..."></textarea>
+                    </div>
+
+                    <div id="urlWarning" class="hidden flex items-start gap-2 text-xs text-orange-700 bg-orange-50 p-3 rounded-lg border border-orange-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="alert-circle" aria-hidden="true" class="lucide lucide-alert-circle w-4 h-4 flex-shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>
+                        <p><strong>Raw URL Detected:</strong> Keywords extracted from URL slug. For best accuracy with unformatted social media posts, ensure you also paste the text description of the event.</p>
+                    </div>
+                </div>
+
+                <!-- STEP 1.5: AI VISION INTEGRATION (Image & Video) -->
+                <div class="bg-indigo-50 p-5 md:p-6 rounded-xl shadow-sm border border-indigo-200 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="eye" aria-hidden="true" class="lucide lucide-eye w-24 h-24 text-indigo-900"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </div>
+                    <h2 class="text-lg font-bold mb-3 flex items-center gap-2 text-indigo-900 border-b border-indigo-200/50 pb-2 relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="camera" aria-hidden="true" class="lucide lucide-camera w-5 h-5 text-indigo-600"><path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                        AI Vision Analysis (Image &amp; Video Triage)
+                    </h2>
+                    <p class="text-xs text-indigo-700 mb-4 relative z-10">Upload a screenshot, photo, or short video clip. For videos, the system will automatically extract a critical keyframe and send it to the Gemini Vision AI to extract kinetic keywords to feed into the SOP Regex Engine.</p>
+                    
+                    <div class="flex items-center gap-4 relative z-10">
+                        <label class="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg cursor-pointer transition-colors shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="upload-cloud" aria-hidden="true" class="lucide lucide-upload-cloud w-4 h-4"><path d="M12 13v8"></path><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="m8 17 4-4 4 4"></path></svg>
+                            Upload Media (Img/Vid)
+                            <input type="file" id="imageInput" accept="image/*,video/*" class="hidden" onchange="handleImageUpload(event)">
+                        </label>
+                        <span id="uploadStatus" class="text-xs font-medium text-indigo-600 truncate max-w-[200px] md:max-w-[300px]">No media uploaded.</span>
+                    </div>
+
+                    <div id="visionOutputContainer" class="hidden mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                        <div class="col-span-1">
+                            <img id="imagePreview" class="w-full h-auto rounded-lg border-2 border-indigo-300 shadow-sm" alt="Preview">
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-indigo-500 mb-1.5">Extracted Vision Context</label>
+                            <textarea id="aiContext" class="w-full h-full min-h-[100px] p-3 bg-white border border-indigo-300 rounded-lg text-xs text-indigo-900 leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none shadow-inner" readonly="" placeholder="AI extraction will appear here..."></textarea>
+                        </div>
+                    </div>
+
+                    <div id="visionLoading" class="hidden mt-4 flex items-center gap-3 text-indigo-600 font-semibold text-sm relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="loader-2" aria-hidden="true" class="lucide lucide-loader-2 w-5 h-5 animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+                        Processing media file...
+                    </div>
+                </div>
+
+                <!-- STEP 2: CYBER & LOCKDOWN OVERRIDES -->
+                <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="layout-grid" aria-hidden="true" class="lucide lucide-layout-grid w-5 h-5 text-indigo-500"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+                        2. Specialized Domain Directives
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Cyber Incident Class</label>
+                            <select id="cyberSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="none">No Cyber Context</option>
+                                <option value="healthcare">Healthcare / Hospital Data Security Incident</option>
+                                <option value="ransomware">Active Ransomware Attack on Network/Systems</option>
+                                <option value="large_scale">Attack Targeting Gov / Financial / NATO Entities</option>
+                                <option value="joint_advisory">Joint Government Advisory (CISA / FBI / NSA)</option>
+                                <option value="zero_day">Actively Exploited Bug / Zero-Day</option>
+                                <option value="phishing">Police Exposing Large-Scale Phishing Campaign</option>
+                                <option value="small_leak">Small-Scale Data Leak (Pastebin list, individual doxxing)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Corporate Impact Scale</label>
+                            <select id="corpSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="none">No Corporate Context</option>
+                                <option value="merger_major">Large Firms Merging (e.g. Apple buying Google)</option>
+                                <option value="c_suite_resign">C-Suite Resignations at Globally Known Firms</option>
+                                <option value="mass_layoffs">Mass Layoffs (&gt;= 10% workforce reduction)</option>
+                                <option value="refinery_physical">Refinery / Factory Explosion or Force Takeover</option>
+                                <option value="minor_deal">Mid-Scale Acquisition / Employee Walkout</option>
+                                <option value="supply_shortage">Surprise Supply Chain Shortage (Signal baseline)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-slate-100 pt-5">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Lockdown Type</label>
+                            <select id="lockdownLocation" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="none">None</option>
+                                <option value="school">School / University</option>
+                                <option value="mall">Shopping Mall</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Active Standoff</label>
+                            <select id="lockdownStatus" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="none">No Lockdown</option>
+                                <option value="active">Active Lockdown</option>
+                                <option value="knockdown">Knockdown / Lifted</option>
+                                <option value="police_scene">Police on Scene Only</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Active Threat</label>
+                            <select id="lockdownThreat" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none">
+                                <option value="none">Unconfirmed</option>
+                                <option value="shots_heard">Shots Heard / SWAT</option>
+                                <option value="active_shooter">Confirmed Active Shooter</option>
+                                <option value="mass_kinetic">Multiple Fatalities / Cop Fatal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: DYNAMIC OVERRIDES -->
+                <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-slate-900 border-b border-slate-100 pb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="sliders" aria-hidden="true" class="lucide lucide-sliders w-5 h-5 text-indigo-500"><path d="M10 8h4"></path><path d="M12 21v-9"></path><path d="M12 8V3"></path><path d="M17 16h4"></path><path d="M19 12V3"></path><path d="M19 21v-5"></path><path d="M3 14h4"></path><path d="M5 10V3"></path><path d="M5 21v-7"></path></svg>
+                        3. Dynamic Quantitative Overrides
+                    </h2>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Fatalities</label>
+                            <input type="number" id="fatalityCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-red-600 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Injuries</label>
+                            <input type="number" id="injuryCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-orange-600 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Arrests</label>
+                            <input type="number" id="arrestCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-blue-600 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Trafficked</label>
+                            <input type="number" id="trafficCount" min="0" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-lg text-center font-bold text-purple-600 focus:ring-2 focus:ring-indigo-500 outline-none transition-shadow">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-check" aria-hidden="true" class="lucide lucide-user-check w-4 h-4 text-indigo-500 flex-shrink-0"><path d="m16 11 2 2 4-4"></path><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                <span class="text-xs font-semibold text-slate-700 leading-tight">US / High-Value Citizen?</span>
+                            </div>
+                            <input type="checkbox" id="usCitizenCheck" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="shield" aria-hidden="true" class="lucide lucide-shield w-4 h-4 text-indigo-500 flex-shrink-0"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                                <span class="text-xs font-semibold text-slate-700 leading-tight">Special Forces Deployed?</span>
+                            </div>
+                            <input type="checkbox" id="specialForcesCheck" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded cursor-pointer">
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg border border-indigo-200 hover:bg-indigo-100 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="building" aria-hidden="true" class="lucide lucide-building w-4 h-4 text-indigo-600 flex-shrink-0"><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M12 6h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M16 6h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path><path d="M8 6h.01"></path><path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"></path><rect x="4" y="2" width="16" height="20" rx="2"></rect></svg>
+                                <span class="text-xs font-semibold text-indigo-800 leading-tight">Prominent Landmark?</span>
+                            </div>
+                            <input type="checkbox" id="landmarkCheck" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-indigo-300 rounded cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DEMOS -->
+                <div class="bg-white p-5 md:p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="mouse-pointer-click" aria-hidden="true" class="lucide lucide-mouse-pointer-click w-4 h-4"><path d="M14 4.1 12 6"></path><path d="m5.1 8-2.9-.8"></path><path d="m6 12-1.9 2"></path><path d="M7.2 2.2 8 5.1"></path><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"></path></svg> Live Training Slide Demos
+                    </h2>
+                    
+                    <div class="flex overflow-x-auto gap-2 mb-5 border-b border-slate-100 pb-4 demo-scroll whitespace-nowrap">
+                        <button onclick="switchTab('crime_alerts')" id="tab-crime_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-sm shrink-0">Crime &amp; Alerts</button>
+                        <button onclick="switchTab('politics')" id="tab-politics" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Politics</button>
+                        <button onclick="switchTab('earthquake_flood')" id="tab-earthquake_flood" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Earthquakes &amp; Floods</button>
+                        <button onclick="switchTab('nyc_alerts')" id="tab-nyc_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">NYC Specific</button>
+                        <button onclick="switchTab('aviation_marine')" id="tab-aviation_marine" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Aviation &amp; Marine</button>
+                    </div>
+
+                    <!-- TAB PANELS -->
+                    <div id="scenario-crime_alerts" class="scenario-panel flex flex-wrap gap-2 animate-in fade-in">
+                        <button onclick="loadDemo('we_stabbing_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">WE Stabbing (National)</button>
+                        <button onclick="loadDemo('we_shooting_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">WE Shooting (National)</button>
+                        <button onclick="loadDemo('we_landmark_global')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">WE Landmark Attack (Global)</button>
+                        <button onclick="loadDemo('we_terror_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">WE Active Terror (Flash)</button>
+                        <button onclick="loadDemo('amber_alert_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Amber Alert (Local)</button>
+                        <button onclick="loadDemo('kidnap_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">US Citizen Kidnapped (Flash)</button>
+                    </div>
+
+                    <div id="scenario-politics" class="scenario-panel hidden flex flex-wrap gap-2">
+                        <button onclick="loadDemo('pol_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">POTUS Emergency (Flash)</button>
+                        <button onclick="loadDemo('pol_global')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">SCOTUS Death (Global)</button>
+                        <button onclick="loadDemo('pol_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Senator Indictment (National)</button>
+                        <button onclick="loadDemo('pol_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Capitol Protest (Local)</button>
+                    </div>
+
+                    <div id="scenario-earthquake_flood" class="scenario-panel hidden flex flex-wrap gap-2">
+                        <button onclick="loadDemo('eq_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Mag &gt;7.0 Earthquake (Flash)</button>
+                        <button onclick="loadDemo('eq_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Mag 6.2 Earthquake (National)</button>
+                        <button onclick="loadDemo('flood_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Dam Failure / Catastrophic (Flash)</button>
+                        <button onclick="loadDemo('flood_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">Flash Flood Warning (Local)</button>
+                    </div>
+
+                    <div id="scenario-nyc_alerts" class="scenario-panel hidden flex flex-wrap gap-2">
+                        <button onclick="loadDemo('nyc_times_square_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Times Square Shooter (Flash)</button>
+                        <button onclick="loadDemo('nyc_nypd_level4')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">NYPD Level 4 (Flash)</button>
+                        <button onclick="loadDemo('nyc_nypd_level3')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">NYPD Level 3 (Global)</button>
+                        <button onclick="loadDemo('nyc_gw_bridge')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">GW Bridge Closed (Global)</button>
+                    </div>
+
+                    <div id="scenario-aviation_marine" class="scenario-panel hidden flex flex-wrap gap-2">
+                        <button onclick="loadDemo('aviation_crash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Commercial Plane Crash (Flash)</button>
+                        <button onclick="loadDemo('aviation_cockpit')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">Cockpit Breach (Global)</button>
+                        <button onclick="loadDemo('maritime_pirate')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">Pirate Attack (Flash)</button>
+                        <button onclick="loadDemo('aviation_drone')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">Drone Grounding (National)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Results & Triggered Matrix Rules -->
+            <div class="lg:col-span-5 flex flex-col gap-6 lg:order-last order-first">
+                <div class="bg-white p-5 md:p-6 rounded-xl shadow-lg border border-slate-200 w-full flex flex-col lg:sticky lg:top-24 max-h-[85vh]">
+                    <div>
+                        <h2 class="text-lg font-bold mb-4 flex items-center gap-2 border-b border-slate-100 pb-3 text-slate-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="activity" aria-hidden="true" class="lucide lucide-activity w-5 h-5 text-emerald-500"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></svg>
+                            Threshold Recommendation
+                        </h2>
+
+                        <div id="emptyState" class="text-center text-slate-400 py-10 flex flex-col items-center">
+                            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-3 border border-slate-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clipboard-paste" aria-hidden="true" class="lucide lucide-clipboard-paste w-8 h-8 text-slate-300"><path d="M11 14h10"></path><path d="M16 4h2a2 2 0 0 1 2 2v1.344"></path><path d="m17 18 4-4-4-4"></path><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>
+                            </div>
+                            <p class="text-sm px-4">Configure parameters, upload an image/video, or paste text to run matrix analysis.</p>
+                        </div>
+
+                        <div id="loadingState" class="hidden space-y-4 py-12">
+                            <div class="flex flex-col items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="loader-2" aria-hidden="true" class="lucide lucide-loader-2 w-10 h-10 text-indigo-500 animate-spin mb-4"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest animate-pulse">Running AES Rule Engine...</p>
+                            </div>
+                        </div>
+
+                        <div id="resultState" class="hidden space-y-5 fade-in flex-1 flex flex-col overflow-hidden">
+                            <div class="flex-shrink-0">
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Suggested Alert Level</p>
+                                <div id="labelCard" class="border-l-4 p-4 md:p-5 rounded-r-xl shadow-md transition-all">
+                                    <h3 id="labelTitle" class="text-2xl sm:text-3xl font-black tracking-tight uppercase break-words leading-none"></h3>
+                                    <p id="labelCategory" class="text-sm mt-2 opacity-90 font-medium"></p>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 flex-1 overflow-hidden flex flex-col">
+                                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3 flex-shrink-0">SOP Rules Triggered</p>
+                                <ul id="rulesList" class="space-y-3 overflow-y-auto pr-2 custom-scroll pb-2 flex-1"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- ENTERPRISE CRYPTO SETTINGS ---
+        // If this variable contains ciphertext, the dashboard boots in Locked Mode.
+        let ENCRYPTED_PAYLOAD = "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";
+
+        // --- RULES SECURED ---
+
+        // App State
+        let activeRules = [];
+        const apiKey = ""; 
+
+        // UI Selectors
+        const inputEl = document.getElementById('inputText');
+        const regionEl = document.getElementById('regionSelect');
+        const criskEl = document.getElementById('criskSelect');
+        const cyberEl = document.getElementById('cyberSelect');
+        const corpEl = document.getElementById('corpSelect');
+        const urlWarning = document.getElementById('urlWarning');
+        const emptyState = document.getElementById('emptyState');
+        const loadingState = document.getElementById('loadingState');
+        const resultState = document.getElementById('resultState');
+        const labelCard = document.getElementById('labelCard');
+        const labelTitle = document.getElementById('labelTitle');
+        const labelCategory = document.getElementById('labelCategory');
+        const rulesList = document.getElementById('rulesList');
+        
+        // AI Vision Selectors
+        const imageInput = document.getElementById('imageInput');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const imagePreview = document.getElementById('imagePreview');
+        const aiContextBox = document.getElementById('aiContext');
+        const visionOutputContainer = document.getElementById('visionOutputContainer');
+        const visionLoading = document.getElementById('visionLoading');
+
+        // Inputs overrides
+        const fatalityInput = document.getElementById('fatalityCount');
+        const injuryInput = document.getElementById('injuryCount');
+        const arrestInput = document.getElementById('arrestCount');
+        const trafficInput = document.getElementById('trafficCount');
+        const usCitizenCheck = document.getElementById('usCitizenCheck');
+        const specialForcesCheck = document.getElementById('specialForcesCheck');
+        const landmarkCheck = document.getElementById('landmarkCheck');
+
+        // School/Mall specifics
+        const lockdownLocation = document.getElementById('lockdownLocation');
+        const lockdownStatus = document.getElementById('lockdownStatus');
+        const lockdownThreat = document.getElementById('lockdownThreat');
+
+        // --- ENCRYPTION / DECRYPTION LOGIC ---
+        function initApp() {
+            if (ENCRYPTED_PAYLOAD === "") {
+                // Dev Mode
+                document.getElementById('devBanner').classList.remove('hidden');
+                activeRules = rawRules; // Load raw rules
+                runAnalysis();
+            } else {
+                // Enterprise Secured Mode
+                document.getElementById('securityOverlay').classList.remove('hidden');
+                document.getElementById('mainAppWrapper').classList.add('locked-blur');
+            }
+        }
+
+        function openSetupModal() { document.getElementById('setupModal').classList.remove('hidden'); }
+        function closeSetupModal() { document.getElementById('setupModal').classList.add('hidden'); }
+
+        function encryptAndDownload() {
+            const pwd = document.getElementById('setupPassword').value;
+            if (!pwd) { alert("Please enter a master password to secure the file."); return; }
+            
+            // AES-256 Encrypt the pure JSON rules
+            const jsonStr = JSON.stringify(rawRules);
+            const ciphertext = CryptoJS.AES.encrypt(jsonStr, pwd).toString();
+            
+            let htmlContent = document.documentElement.outerHTML;
+            
+            // PERMANENTLY STRIP THE PLAIN TEXT RULES FROM THE SOURCE CODE
+            htmlContent = htmlContent.replace(/\/\/ --- START_RAW_RULES ---[\s\S]*?\/\/ --- END_RAW_RULES ---/, "// --- RULES SECURED ---");
+            htmlContent = htmlContent.replace(/let ENCRYPTED_PAYLOAD = "";/, `let ENCRYPTED_PAYLOAD = "${ciphertext}";`);
+            
+            // Reconstruct HTML and trigger download
+            const blob = new Blob(["<!DOCTYPE html>\n<html lang=\"en\">\n" + htmlContent + "\n</html>"], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "Global_Analyzer_Secure.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            closeSetupModal();
+        }
+
+        function attemptDecryption() {
+            const pwd = document.getElementById('decryptPassword').value;
+            const errEl = document.getElementById('decryptError');
+            
+            try {
+                const bytes = CryptoJS.AES.decrypt(ENCRYPTED_PAYLOAD, pwd);
+                const decryptedStr = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (!decryptedStr) throw new Error("Empty decryption");
+                
+                activeRules = JSON.parse(decryptedStr);
+                
+                // Unlock the app!
+                document.getElementById('securityOverlay').classList.add('hidden');
+                document.getElementById('mainAppWrapper').classList.remove('locked-blur');
+                runAnalysis();
+                
+            } catch (e) {
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        // --- GEMINI VISION AI LOGIC ---
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            const delays = [1000, 2000, 4000, 8000, 16000];
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    await new Promise(res => setTimeout(res, delays[i]));
+                }
+            }
+        }
+
+        async function analyzeImageWithGemini(base64Data, mimeType) {
+            if (!apiKey) {
+                return "[AI Vision Analysis Disabled: API key missing in environment. Proceeding with text-only evaluation.]";
+            }
+
+            const prompt = `You are a strict global security, risk, and emergency thresholding analyst. Look closely at this image/frame. 
+            1. Provide a 1-sentence description of the event.
+            2. Output a comma-separated list of highly specific keywords that indicate the kinetic severity of the event.
+            You MUST use terms that match risk SOPs: 'massive fire', 'structural collapse', 'riot police', 'weapons visible', 'active shooter', 'flooding', 'mass casualty', 'uncontrolled fire', 'structural damage', 'tens of thousands', 'clashes'.`;
+
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: prompt },
+                        { inlineData: { mimeType: mimeType, data: base64Data } }
+                    ]
+                }],
+                systemInstruction: {
+                    parts: [{ text: "You are a specialized risk analyst extracting keywords for a regex SOP engine. Be direct and utilize standard incident nomenclature." }]
+                }
+            };
+
+            try {
+                const result = await fetchWithRetry(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "No actionable insights extracted from image.";
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "[Error reaching Gemini Vision API. Falling back to text analysis only.]";
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            uploadStatus.innerText = file.name;
+            visionOutputContainer.classList.remove('hidden');
+            aiContextBox.value = "";
+            visionLoading.classList.remove('hidden');
+            visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Processing media file...';
+            lucide.createIcons();
+
+            if (file.type.startsWith('video/')) {
+                visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Extracting key frame from video...';
+                lucide.createIcons();
+                
+                const video = document.createElement('video');
+                video.src = URL.createObjectURL(file);
+                video.muted = true;
+                video.crossOrigin = 'anonymous';
+                
+                video.onloadedmetadata = () => {
+                    video.currentTime = Math.min(2, video.duration * 0.2); 
+                };
+                
+                video.onseeked = async () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    const dataUrl = canvas.toDataURL('image/jpeg');
+                    imagePreview.src = dataUrl;
+                    
+                    const base64String = dataUrl.split(',')[1];
+                    
+                    visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Gemini Vision is analyzing the frame...';
+                    lucide.createIcons();
+                    
+                    const aiResult = await analyzeImageWithGemini(base64String, 'image/jpeg');
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = aiResult;
+                    
+                    runAnalysis();
+                };
+                
+                video.onerror = () => {
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = "[Error: Could not extract frame from video file.]";
+                };
+
+            } else {
+                visionLoading.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Gemini Vision is analyzing the scene...';
+                lucide.createIcons();
+                
+                imagePreview.src = URL.createObjectURL(file);
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const base64String = e.target.result.split(',')[1];
+                    const mimeType = file.type;
+                    
+                    const aiResult = await analyzeImageWithGemini(base64String, mimeType);
+                    visionLoading.classList.add('hidden');
+                    aiContextBox.value = aiResult;
+                    
+                    runAnalysis();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function extractTextFromContent(text, aiContext = "") {
+            let processedText = text + " " + aiContext;
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            const urls = text.match(urlRegex);
+            if (urls && text.trim() === urls[0]) {
+                urlWarning.classList.remove('hidden');
+            } else {
+                urlWarning.classList.add('hidden');
+            }
+            if (urls) {
+                urls.forEach(url => {
+                    try {
+                        const parsed = new URL(url);
+                        const urlWords = parsed.pathname.replace(/[\/\-_]/g, ' ') + " " + parsed.hostname.replace(/\./g, ' ');
+                        processedText += " " + urlWords;
+                    } catch(e) {}
+                });
+            }
+            return processedText;
+        }
+
+        // --- THE SECURE DATA-DRIVEN ENGINE ---
+        function evaluateContent() {
+            const text = inputEl.value;
+            const aiContext = aiContextBox.value;
+            const region = regionEl.value;
+            
+            const flags = {
+                fatalities: parseInt(fatalityInput.value) || 0,
+                injuries: parseInt(injuryInput.value) || 0,
+                arrests: parseInt(arrestInput.value) || 0,
+                trafficked: parseInt(trafficInput.value) || 0,
+                usCitizen: usCitizenCheck.checked,
+                specialForces: specialForcesCheck.checked,
+                landmark: landmarkCheck.checked,
+                crisk: criskEl.value,
+                cyber: cyberEl.value,
+                corp: corpEl.value,
+                lockdownType: lockdownLocation.value,
+                lockdownStatus: lockdownStatus.value,
+                lockdownThreat: lockdownThreat.value
+            };
+
+            const textToAnalyze = extractTextFromContent(text, aiContext);
+            let triggeredRules = [];
+            let highestLevel = 1; 
+            let primaryCategory = "General";
+
+            // Run strict validation rule matrix using pure data evaluation
+            activeRules.forEach(rule => {
+                let isMatch = true;
+                
+                // Region Constraint
+                if (rule.region && !rule.region.includes(region)) isMatch = false;
+                
+                // Specific Overrides
+                if (rule.requiresLandmark && !flags.landmark) isMatch = false;
+                if (rule.requiresUSCitizen && !flags.usCitizen) isMatch = false;
+                if (rule.requiresSpecialForces && !flags.specialForces) isMatch = false;
+                if (rule.minFatalities && flags.fatalities < rule.minFatalities) isMatch = false;
+                if (rule.minInjuries && flags.injuries < rule.minInjuries) isMatch = false;
+                if (rule.minArrests && flags.arrests < rule.minArrests) isMatch = false;
+                
+                // Specialized Domains
+                if (rule.requiresLockdownType && flags.lockdownType === 'none') isMatch = false;
+                if (rule.requiresLockdownStatus && flags.lockdownStatus !== rule.requiresLockdownStatus) isMatch = false;
+                if (rule.requiresLockdownThreat && flags.lockdownThreat !== rule.requiresLockdownThreat) isMatch = false;
+                if (rule.requiresCyber && flags.cyber !== rule.requiresCyber) isMatch = false;
+                if (rule.requiresCorp && flags.corp !== rule.requiresCorp) isMatch = false;
+                if (rule.requiresCrisk && flags.crisk !== rule.requiresCrisk) isMatch = false;
+
+                // Regex Constraints
+                if (isMatch && rule.regex) {
+                    const rx = new RegExp(rule.regex, "i");
+                    if (!rx.test(textToAnalyze)) isMatch = false;
+                }
+                if (isMatch && rule.regexNegative) {
+                    const rxn = new RegExp(rule.regexNegative, "i");
+                    if (rxn.test(textToAnalyze)) isMatch = false;
+                }
+
+                if (isMatch) {
+                    triggeredRules.push(rule);
+                    if (rule.level > highestLevel) {
+                        highestLevel = rule.level;
+                        primaryCategory = rule.cat;
+                    }
+                }
+            });
+
+            // UPDATED Multi-casualty Overrides (3+ fatalities OR 5+ injuries = Flash)
+            if (flags.fatalities >= 3 || flags.injuries >= 5) {
+                triggeredRules.push({
+                    level: 5,
+                    cat: "Casualty Baseline",
+                    reason: "SOP: Mass casualty incident involving 3+ fatalities or 5+ injuries forces Flash Upgrade."
+                });
+                highestLevel = 5;
+                primaryCategory = "Casualties";
+            } else if (flags.fatalities >= 1 && highestLevel < 2) {
+                triggeredRules.push({
+                    level: 2,
+                    cat: "Casualty Baseline",
+                    reason: "SOP: Confirmed fatalities establish a baseline Local Urgent threshold."
+                });
+                highestLevel = 2;
+                primaryCategory = "Casualties";
+            }
+
+            // Standard Fallbacks
+            if (triggeredRules.length === 0) {
+                if (text.trim().length > 0 || aiContext.trim().length > 0) {
+                    triggeredRules.push({
+                        level: 1,
+                        cat: "Baseline Monitoring",
+                        reason: "SOP Default: Event matches regular Signal baseline tracking. No major kinetic, corporate, or weather variables triggered."
+                    });
+                    highestLevel = 1;
+                    primaryCategory = "Baseline";
+                } else {
+                    highestLevel = 0; 
+                }
+            }
+
+            const levels = ["Local Signal", "Signal", "Local Urgent", "National Urgent", "Global Urgent", "Flash"];
+            const colors = [
+                "bg-slate-100 text-slate-800 border-slate-300", 
+                "bg-blue-50 text-blue-800 border-blue-300", 
+                "bg-yellow-50 text-yellow-800 border-yellow-400", 
+                "bg-orange-50 text-orange-800 border-orange-400", 
+                "bg-purple-50 text-purple-800 border-purple-400", 
+                "bg-red-50 text-red-800 border-red-500 animate-pulse"
+            ];
+
+            triggeredRules.sort((a, b) => b.level - a.level);
+
+            return {
+                levelText: levels[highestLevel],
+                colorClass: colors[highestLevel],
+                matches: triggeredRules,
+                category: primaryCategory
+            };
+        }
+
+        let analyzeTimeout;
+
+        function runAnalysis() {
+            if(activeRules.length === 0) return; // Prevent running if locked
+
+            const text = inputEl.value;
+            const aiContext = aiContextBox.value;
+            const activeOverrides = (
+                fatalityInput.value > 0 || injuryInput.value > 0 || 
+                arrestInput.value > 0 || trafficInput.value > 0 || 
+                usCitizenCheck.checked || specialForcesCheck.checked || landmarkCheck.checked ||
+                lockdownLocation.value !== 'none' || lockdownStatus.value !== 'none' ||
+                lockdownThreat.value !== 'none' || cyberEl.value !== 'none' || corpEl.value !== 'none'
+            );
+
+            if (!text.trim() && !aiContext.trim() && !activeOverrides) {
+                emptyState.classList.remove('hidden');
+                resultState.classList.add('hidden');
+                loadingState.classList.add('hidden');
+                urlWarning.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            resultState.classList.add('hidden');
+            loadingState.classList.remove('hidden');
+
+            setTimeout(() => {
+                const res = evaluateContent();
+                
+                labelCard.className = `border-l-4 p-4 md:p-5 rounded-r-xl shadow-md transition-all ${res.colorClass}`;
+                labelTitle.innerText = res.levelText;
+                labelCategory.innerText = `Category: ${res.category}`;
+
+                rulesList.innerHTML = '';
+                
+                const uniqueReasons = new Set();
+                res.matches.forEach(match => {
+                    if (!uniqueReasons.has(match.reason)) {
+                        uniqueReasons.add(match.reason);
+                        
+                        const iconColor = match.level === 5 ? 'text-red-500' : match.level === 4 ? 'text-purple-500' : match.level === 3 ? 'text-orange-500' : match.level === 2 ? 'text-yellow-500' : 'text-blue-400';
+                        const targetNames = ["Local Signal", "Signal Baseline", "Local Urgent", "National Urgent", "Global Urgent", "Flash"];
+                        
+                        const li = document.createElement('li');
+                        li.className = "flex items-start gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 shadow-sm";
+                        li.innerHTML = `
+                            <i data-lucide="check-circle" class="w-5 h-5 flex-shrink-0 mt-0.5 ${iconColor}"></i>
+                            <div>
+                                <span class="text-sm font-semibold text-slate-800 block leading-tight">${match.reason}</span>
+                                <span class="text-[11px] text-slate-500 mt-1.5 block font-medium uppercase tracking-wider">Applies to Matrix Tier: ${targetNames[match.level]}</span>
+                            </div>
+                        `;
+                        rulesList.appendChild(li);
+                    }
+                });
+
+                loadingState.classList.add('hidden');
+                resultState.classList.remove('hidden');
+                lucide.createIcons();
+            }, 300);
+        }
+
+        const inputsToListen = [
+            inputEl, regionEl, criskEl, cyberEl, corpEl, 
+            fatalityInput, injuryInput, arrestInput, trafficInput, 
+            usCitizenCheck, specialForcesCheck, landmarkCheck,
+            lockdownLocation, lockdownStatus, lockdownThreat
+        ];
+        
+        inputsToListen.forEach(elem => {
+            elem.addEventListener('input', () => { clearTimeout(analyzeTimeout); analyzeTimeout = setTimeout(runAnalysis, 400); });
+            elem.addEventListener('change', () => { clearTimeout(analyzeTimeout); analyzeTimeout = setTimeout(runAnalysis, 100); });
+        });
+
+        // Initialize App on Load
+        initApp();
+
+        function switchTab(category) {
+            document.querySelectorAll('.scenario-panel').forEach(panel => panel.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.className = "tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0");
+            
+            document.getElementById(`scenario-${category}`).classList.remove('hidden');
+            document.getElementById(`tab-${category}`).className = "tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white shadow-sm shrink-0";
+        }
+
+        function loadDemo(type) {
+            fatalityInput.value = 0; injuryInput.value = 0; arrestInput.value = 0; trafficInput.value = 0;
+            usCitizenCheck.checked = false; specialForcesCheck.checked = false; landmarkCheck.checked = false;
+            criskEl.value = 'none'; cyberEl.value = 'none'; corpEl.value = 'none';
+            lockdownLocation.value = 'none'; lockdownStatus.value = 'none'; lockdownThreat.value = 'none';
+
+            if (type === 'we_stabbing_national') {
+                inputEl.value = "Police are investigating an isolated stabbing incident in a residential neighborhood in Madrid.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_shooting_national') {
+                inputEl.value = "Initial reports indicate gunshots were heard near a suburban street in Madrid. Police are en route.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_landmark_global') {
+                inputEl.value = "Police are responding to reports of a violent stabbing in the middle of a crowded tourist plaza in Rome.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_terror_flash') {
+                inputEl.value = "Multiple active shooters reported in central Paris. Counter-terror units deployed.";
+                regionEl.value = 'WE';
+            } else if (type === 'police_arrest_custody') {
+                inputEl.value = "Update from detectives: Police have successfully made an arrest and announce the suspect is now in custody.";
+                regionEl.value = 'USCAN';
+                arrestInput.value = 1;
+            } else if (type === 'mass_casualty_injuries') {
+                inputEl.value = "Paramedics on scene confirming 6 people have been severely injured following the incident.";
+                regionEl.value = 'USCAN';
+                injuryInput.value = 6;
+            } else if (type === 'amber_alert_local') {
+                inputEl.value = "An AMBER Alert has been issued for a missing 7-year-old child last seen near the downtown area.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'manhunt_national') {
+                inputEl.value = "Authorities have launched a multi-state manhunt for the suspect involved in yesterday's incident.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'kidnap_flash') {
+                inputEl.value = "Breaking: Armed suspects have kidnapped a US citizen traveling in the region. Embassy notified.";
+                regionEl.value = 'LATAM';
+                usCitizenCheck.checked = true;
+            } else if (type === 'landmark_fire') {
+                inputEl.value = "https://redlib.catsarch.com/r/Calgary/comments/1trhrk2/beltline_fire_took_photo_around_calgary_arts/";
+                regionEl.value = 'USCAN';
+                landmarkCheck.checked = true;
+            } else if (type === 'eq_flash') {
+                inputEl.value = "A catastrophic earthquake measuring magnitude 7.4 has struck the capital. Multiple buildings collapsed.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'eq_national') {
+                inputEl.value = "USGS reports a magnitude 6.2 earthquake offshore. Moderate damage expected.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'flood_flash') {
+                inputEl.value = "NWS issues catastrophic Flash Flood Emergency. Dam failure imminent, entire town submerged.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'flood_local') {
+                inputEl.value = "Flash Flood Warning issued for the county. Minor street flooding reported.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'nyc_times_square_flash') {
+                inputEl.value = "Reports of an active shooter in Times Square. Heavy NYPD presence and mass casualties reported.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_nypd_level4') {
+                inputEl.value = "NYPD has called a Level 4 mobilization citywide following a series of coordinated attacks.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_nypd_level3') {
+                inputEl.value = "NYPD has called a Level 3 mobilization for a large unpermitted protest moving through lower Manhattan.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_gw_bridge') {
+                inputEl.value = "The George Washington Bridge is fully shut down in both directions due to a suspicious package.";
+                regionEl.value = 'NYC';
+            } else if (type === 'nyc_mta_stabbing') {
+                inputEl.value = "NYPD responding to a slashing/stabbing on a northbound A train at 14th Street. MTA subway service disrupted.";
+                regionEl.value = 'NYC';
+            } else if (type === 'cbrn_flash') {
+                inputEl.value = "Military units responding to confirmed radiation leak / potential biological attack at the facility. Massive toxic cloud visible.";
+                regionEl.value = 'WE';
+            } else if (type === 'hazmat_national') {
+                inputEl.value = "Overturned hazmat truck causing a major chemical spill on the highway. Mandatory evacuation of a 2-mile radius.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'rail_flash') {
+                inputEl.value = "Mass casualty incident: High-speed passenger train derailment reported outside the main terminal.";
+                regionEl.value = 'FR';
+            } else if (type === 'rail_national') {
+                inputEl.value = "Entire city subway system suspended following a major power failure and freight train derailment.";
+                regionEl.value = 'UK';
+            } else if (type === 'tornado_emergency') {
+                inputEl.value = "NWS has issued a Tornado Emergency for the greater metropolitan area. A large, violent tornado is on the ground.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pds_tornado') {
+                inputEl.value = "Particularly Dangerous Situation (PDS) Tornado Warning issued for an area with a population exceeding 50,000 residents.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'tornado_warning') {
+                inputEl.value = "The National Weather Service has issued a Tornado Warning for the county. Seek shelter immediately.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'hurricane_flash') {
+                inputEl.value = "The NHC warns that a Category 4 Major Hurricane is approaching the coast with catastrophic storm surge expected upon landfall.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'tropical_storm_local') {
+                inputEl.value = "A Tropical Storm Warning has been officially issued for the coastal counties ahead of the approaching system.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'volcano_flash') {
+                inputEl.value = "Authorities have issued a Volcanic Ash Advisory (VAA) warning of significant aviation impacts across the region.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'unrest_insurgency') {
+                inputEl.value = "Reports of an active military coup underway as armed insurgents seize the national broadcasting station.";
+                regionEl.value = 'LATAM';
+            } else if (type === 'protest_clashes') {
+                inputEl.value = "Severe clashes reported at the ongoing protest outside the terminal. Major disruptions are occurring and multiple flights canceled as the crowd grows.";
+                regionEl.value = 'WE';
+            } else if (type === 'protest_arrests') {
+                inputEl.value = "Police are making numerous arrests at the unpermitted demonstration currently blocking the central intersection.";
+                regionEl.value = 'USCAN';
+                arrestInput.value = 5;
+            } else if (type === 'protest_local') {
+                inputEl.value = "A planned public rally and demonstration is scheduled for tomorrow afternoon. Expect minor local disruptions and traffic delays.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'infra_blackout') {
+                inputEl.value = "A multi-state blackout has plunged the eastern seaboard into darkness.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'finance_bank_run') {
+                inputEl.value = "Panic in the markets: Citizens forming massive lines indicating a run on a major national bank.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_flash') {
+                inputEl.value = "Catastrophic wildfire has completely engulfed the valley, with an entire town destroyed and dozens reported trapped by the flames.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_national') {
+                inputEl.value = "The NWS has issued a Red Flag Warning for the state. A new uncontrolled wildfire is forcing evacuations in the foothills.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'wildfire_local') {
+                inputEl.value = "Fire crews are on scene of a 50-acre brush fire that is rapidly spreading and threatening nearby suburban structures.";
+                regionEl.value = 'ANZ';
+            } else if (type === 'wildfire_signal') {
+                inputEl.value = "Authorities have issued a Fire Weather Watch for the weekend due to low humidity and high winds. Yesterday's brush fire is now 100% contained.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'aviation_crash') {
+                inputEl.value = "Breaking: A commercial plane crash has been reported shortly after takeoff. Emergency crews rushing to scene.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'aviation_cockpit') {
+                inputEl.value = "Attempted cockpit breach onboard UA2005. Flight diverted due to severe security incident.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'maritime_pirate') {
+                inputEl.value = "Distress signal received: A cargo vessel is currently under an active pirate attack off the coast.";
+                regionEl.value = 'LATAM';
+            } else if (type === 'aviation_drone') {
+                inputEl.value = "Multiple drone sightings have forced the temporary grounding of flights at the international airport.";
+                regionEl.value = 'WE';
+            } else if (type === 'maritime_ferry') {
+                inputEl.value = "A commercial ferry is stranded at sea with 300 passengers onboard due to complete engine failure.";
+                regionEl.value = 'ANZ';
+            } else if (type === 'mall_highly_kinetic') {
+                inputEl.value = "Highly kinetic updates: Stabbing incident at Macy's Westfield Mall has escalated with reports of a police officer fatality and multiple civilian injuries during the active response.";
+                regionEl.value = 'USCAN';
+                lockdownLocation.value = 'mall'; lockdownStatus.value = 'active'; lockdownThreat.value = 'mass_kinetic';
+            } else if (type === 'school_confirmed_active') {
+                inputEl.value = "Confirmation of an active shooter inside the main building of the university campus. First responders are on scene, lockdown protocols active.";
+                regionEl.value = 'USCAN';
+                lockdownLocation.value = 'school'; lockdownStatus.value = 'active'; lockdownThreat.value = 'active_shooter';
+            } else if (type === 'hospital_breach') {
+                inputEl.value = "Active cybersecurity ransomware variant detected targeting patient healthcare records inside the medical center database.";
+                regionEl.value = 'USCAN';
+                cyberEl.value = 'healthcare';
+            } else if (type === 'pol_flash') {
+                inputEl.value = "Breaking: The President has suffered a severe medical emergency and is currently in critical condition at the hospital.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_global') {
+                inputEl.value = "Tragic news as a sitting Supreme Court Justice has passed away unexpectedly this morning.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_national') {
+                inputEl.value = "A prominent sitting Senator has just faced a formal indictment on federal corruption charges.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_local') {
+                inputEl.value = "Several polling place closures reported due to election disruption and protests at the state capitol.";
+                regionEl.value = 'USCAN';
+            }
+            
+            runAnalysis();
+        }
+    </script>
+
+</body></html>
+</html>
