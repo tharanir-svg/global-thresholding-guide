@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Event Thresholding Analyzer v10.2</title>
+    <title>Global Event Thresholding Analyzer v10.5</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -30,7 +30,7 @@
             <i data-lucide="shield-alert" class="w-8 h-8 text-blue-400 flex-shrink-0"></i>
             <div>
                 <h1 class="text-lg md:text-xl font-bold tracking-wide leading-tight">Global Event Thresholding Analyzer</h1>
-                <p class="text-xs text-emerald-400 font-medium">SOP Master System v10.4 (Engine Perfected: Directionless Regex Matching)</p>
+                <p class="text-xs text-emerald-400 font-medium">SOP Master System v10.5 (Engine Perfected: WE/UK Escalations & Logic Review)</p>
             </div>
         </div>
         <div class="hidden md:flex items-center gap-2 text-sm text-slate-400 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800 shadow-inner">
@@ -247,7 +247,7 @@
                 
                 <div class="flex overflow-x-auto gap-2 mb-5 border-b border-slate-100 pb-4 demo-scroll whitespace-nowrap">
                     <button onclick="switchTab('crime_alerts')" id="tab-crime_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-blue-600 text-white shadow-sm shrink-0">Crime & Alerts</button>
-                    <button onclick="switchTab('politics')" id="tab-politics" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Politics (New)</button>
+                    <button onclick="switchTab('politics')" id="tab-politics" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Politics</button>
                     <button onclick="switchTab('earthquake_flood')" id="tab-earthquake_flood" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Earthquakes & Floods</button>
                     <button onclick="switchTab('nyc_alerts')" id="tab-nyc_alerts" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">NYC Specific</button>
                     <button onclick="switchTab('hazmat_rail')" id="tab-hazmat_rail" class="tab-btn px-4 py-2 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 shrink-0">Hazmat & Rail</button>
@@ -260,7 +260,7 @@
 
                 <!-- TAB PANELS -->
                 <div id="scenario-crime_alerts" class="scenario-panel flex flex-wrap gap-2 animate-in fade-in">
-                    <button onclick="loadDemo('we_stabbing_local')" class="text-xs bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-1.5 px-3 rounded-full border border-yellow-200 transition-colors font-medium">WE Stabbing (Local)</button>
+                    <button onclick="loadDemo('we_stabbing_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">WE Stabbing (National)</button>
                     <button onclick="loadDemo('we_shooting_national')" class="text-xs bg-orange-50 hover:bg-orange-100 text-orange-700 py-1.5 px-3 rounded-full border border-orange-200 transition-colors font-medium">WE Shooting (National)</button>
                     <button onclick="loadDemo('we_landmark_global')" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 py-1.5 px-3 rounded-full border border-purple-200 transition-colors font-medium">WE Landmark Attack (Global)</button>
                     <button onclick="loadDemo('we_terror_flash')" class="text-xs bg-red-50 hover:bg-red-100 text-red-700 py-1.5 px-3 rounded-full border border-red-200 transition-colors font-medium">WE Active Terror (Flash)</button>
@@ -425,7 +425,7 @@
         const lockdownStatus = document.getElementById('lockdownStatus');
         const lockdownThreat = document.getElementById('lockdownThreat');
 
-        // --- EXHAUSTIVE DYNAMIC SOP DATABASE v10.4 ---
+        // --- EXHAUSTIVE DYNAMIC SOP DATABASE v10.5 ---
         // Levels defined in official pyramid:
         // 0: Local Signal | 1: Signal | 2: Local Urgent | 3: National Urgent | 4: Global Urgent | 5: Flash
         const sopRules = [
@@ -541,9 +541,9 @@
 
             // WE/UK/FR TIERED VIOLENT CRIME MATRIX
             { id: "we_uk_active_terror_flash", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(active shooter|terror|mass casualty|multiple fatalities)/i.test(text), level: 5, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Active shooters or terror incidents escalate instantly to Flash." },
-            { id: "we_uk_sensitive_global", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(?=.*(stabbing|stabbed|knife|shooting|gunshot|gunfire|shots fired|shot|gunman))(?=.*(tourist|landmark|museum|square|plaza|station|airport|transit|public space))/i.test(text), level: 4, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Shootings or stabbings in tourist areas, landmarks, or transit hubs escalate to Global Urgent." },
+            { id: "we_uk_sensitive_global", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(stabbing|stabbed|knife|shooting|gunshot|gunfire|shots fired|shot|gunman)/i.test(text) && (flags.landmark || /(tourist|landmark|museum|square|plaza|station|airport|transit|public space)/i.test(text)), level: 4, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Shootings or stabbings in tourist areas, landmarks, or transit hubs escalate to Global Urgent." },
             { id: "we_uk_shooting_national", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(shooting|gunshot|gunfire|shots fired|shot|gunman)/i.test(text), level: 3, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Baseline firearms incidents (shootings, shots fired) in Europe escalate to National Urgent due to weapon scarcity." },
-            { id: "we_uk_stabbing_local", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(stabbing|stabbed|knife|blade)/i.test(text), level: 2, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Baseline isolated stabbings establish a Local Urgent threshold." },
+            { id: "we_uk_stabbing_national", trigger: (text, region, flags) => ['WE', 'UK', 'FR'].includes(region) && /(stabbing|stabbed|knife|blade)/i.test(text), level: 3, cat: "WE/UK Security", reason: "SOP (WE/UK/FR Mod): Baseline isolated stabbings establish a National Urgent threshold." },
 
             // RM ENGLISH CRIME & FIRES (Global Baselines)
             { id: "fire_smoke_local_signal", trigger: (text, region, flags) => /smoke|possible fire/i.test(text) && !/injured|alarm|arson/i.test(text), level: 0, cat: "Fires & Collapses", reason: "SOP: Reports of smoke or possible fire with no active injuries default to Local Signal." },
@@ -910,21 +910,20 @@
             criskEl.value = 'none'; cyberEl.value = 'none'; corpEl.value = 'none';
             lockdownLocation.value = 'none'; lockdownStatus.value = 'none'; lockdownThreat.value = 'none';
 
-            // Demos
-            if (type === 'pol_flash') {
-                inputEl.value = "Breaking: The President has suffered a severe medical emergency and is currently in critical condition at the hospital.";
-                regionEl.value = 'USCAN';
-            } else if (type === 'pol_global') {
-                inputEl.value = "Tragic news as a sitting Supreme Court Justice has passed away unexpectedly this morning.";
-                regionEl.value = 'USCAN';
-            } else if (type === 'pol_national') {
-                inputEl.value = "A prominent sitting Senator has just faced a formal indictment on federal corruption charges.";
-                regionEl.value = 'USCAN';
-            } else if (type === 'pol_local') {
-                inputEl.value = "Several polling place closures reported due to election disruption and protests at the state capitol.";
-                regionEl.value = 'USCAN';
-            } else if (type === 'space_debris') {
-                inputEl.value = "Warning: Large fragments of space debris have struck a populated residential area causing structural damage.";
+            if (type === 'we_stabbing_national') {
+                inputEl.value = "Police are investigating an isolated stabbing incident in a residential neighborhood in Madrid.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_shooting_national') {
+                inputEl.value = "Initial reports indicate gunshots were heard near a suburban street in Madrid. Police are en route.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_landmark_global') {
+                inputEl.value = "Police are responding to reports of a violent stabbing in the middle of a crowded tourist plaza in Rome.";
+                regionEl.value = 'WE';
+            } else if (type === 'we_terror_flash') {
+                inputEl.value = "Multiple active shooters reported in central Paris. Counter-terror units deployed.";
+                regionEl.value = 'WE';
+            } else if (type === 'police_arrest_custody') {
+                inputEl.value = "Update from detectives: Police have successfully made an arrest and announce the suspect is now in custody.";
                 regionEl.value = 'USCAN';
                 arrestInput.value = 1;
             } else if (type === 'mass_casualty_injuries') {
@@ -1060,6 +1059,18 @@
                 inputEl.value = "Active cybersecurity ransomware variant detected targeting patient healthcare records inside the medical center database.";
                 regionEl.value = 'USCAN';
                 cyberEl.value = 'healthcare';
+            } else if (type === 'pol_flash') {
+                inputEl.value = "Breaking: The President has suffered a severe medical emergency and is currently in critical condition at the hospital.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_global') {
+                inputEl.value = "Tragic news as a sitting Supreme Court Justice has passed away unexpectedly this morning.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_national') {
+                inputEl.value = "A prominent sitting Senator has just faced a formal indictment on federal corruption charges.";
+                regionEl.value = 'USCAN';
+            } else if (type === 'pol_local') {
+                inputEl.value = "Several polling place closures reported due to election disruption and protests at the state capitol.";
+                regionEl.value = 'USCAN';
             }
             
             runAnalysis();
