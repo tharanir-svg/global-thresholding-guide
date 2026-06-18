@@ -722,7 +722,23 @@ const incident = {
                 lockdownStatus: lockdownStatus.value,
                 lockdownThreat: lockdownThreat.value
             };
+// Populate Incident Object
+incident.fatalities = flags.fatalities;
+incident.injuries = flags.injuries;
+incident.arrests = flags.arrests;
+incident.trafficked = flags.trafficked;
 
+incident.landmark = flags.landmark;
+incident.specialForces = flags.specialForces;
+incident.corporateImpact = (flags.corp !== "none");
+
+incident.crisk = flags.crisk;
+incident.cyber = flags.cyber;
+incident.corp = flags.corp;
+
+incident.lockdownType = flags.lockdownType;
+incident.lockdownStatus = flags.lockdownStatus;
+incident.lockdownThreat = flags.lockdownThreat;
             const textToAnalyze = extractTextFromContent(text, aiContext);
             let triggeredRules = [];
             let highestLevel = 1; 
