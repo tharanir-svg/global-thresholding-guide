@@ -680,7 +680,33 @@
             const text = inputEl.value;
             const aiContext = aiContextBox.value;
             const region = regionEl.value;
-            
+            // ===== NEW INCIDENT OBJECT =====
+const incident = {
+    rawText: text,
+    aiContext: aiContext,
+    region: region,
+
+    eventType: "",
+    subType: "",
+
+    fatalities: 0,
+    injuries: 0,
+    arrests: 0,
+    trafficked: 0,
+
+    confirmation: "Unknown",
+    lifecycle: "Emerging",
+
+    corporateImpact: false,
+    landmark: false,
+    specialForces: false,
+
+    severityScore: 0,
+    confidenceScore: 0,
+
+    triggeredRules: [],
+    finalThreshold: "Signal"
+};
             const flags = {
                 fatalities: parseInt(fatalityInput.value) || 0,
                 injuries: parseInt(injuryInput.value) || 0,
